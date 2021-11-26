@@ -2,12 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'yasnippet)
-(require 'evil)
-(require 'helm)
-(require 'projectile)
-(require 'omnisharp)
-(require 'core-keybindings)
+;; (require 'yasnippet)
+;; (require 'evil)
+;; (require 'helm)
+;; (require 'projectile)
+;; (require 'omnisharp)
+;; (require 'core-keybindings)
 
 ;;; projectile
 

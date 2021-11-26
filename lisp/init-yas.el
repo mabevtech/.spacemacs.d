@@ -2,11 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'yasnippet)
-(require 'evil)
-(require 'helm)
-(require 'subr-x)
-;; (require 'hybrid-mode)
+;; (require 'yasnippet)
+;; (require 'evil)
+;; (require 'helm)
+;; (require 'subr-x)
+;; ;; (require 'hybrid-mode)
 
 ;;; helm
 

@@ -2,11 +2,11 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'evil)
-(require 'company)
-(require 'python)
-(require 'yasnippet)
-(require 'core-keybindings)
+;; (require 'evil)
+;; (require 'company)
+;; (require 'python)
+;; (require 'yasnippet)
+;; (require 'core-keybindings)
 
 ;; https://github.com/syl20bnr/spacemacs/issues/10638#issuecomment-386519064
 (eval-after-load "company"

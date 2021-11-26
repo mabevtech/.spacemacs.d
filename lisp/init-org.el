@@ -2,9 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'org-capture)
-(require 'org-agenda)
-(require 'helm-mode)
+;; (require 'org-capture)
+;; (require 'org-agenda)
+;; (require 'helm-mode)
 
 ;;; org-capture
 

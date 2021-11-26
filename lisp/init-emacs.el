@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'exec-path-from-shell)
+;; (require 'exec-path-from-shell)
 
 ;; Make sure that emacs will have $PATH variables from default shell
 (when (memq window-system '(mac ns))

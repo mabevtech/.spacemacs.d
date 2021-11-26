@@ -2,9 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'evil)
-(require 'evil-cleverparens-text-objects)
-;; (require 'hybrid-mode)
+;; (require 'evil)
+;; (require 'evil-cleverparens-text-objects)
+;; ;; (require 'hybrid-mode)
 
 ;; Use a box cursor on insert/hybrid modes instead of bar one
 (setq-default evil-insert-state-cursor

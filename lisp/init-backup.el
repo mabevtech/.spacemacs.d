@@ -2,10 +2,10 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'subr-x)
-(require 'dash)
-(require 'simple)
-(require 'core-load-paths)
+;; (require 'subr-x)
+;; (require 'dash)
+;; (require 'simple)
+;; (require 'core-load-paths)
 
 (defconst mabo3n/backup-files-remote-directory "d:env/"
   "Where `mabo3n/backup-files' moves files to.")

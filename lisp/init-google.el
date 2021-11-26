@@ -6,11 +6,11 @@
 
 ;;; Code:
 
-(require 'helm)
-(require 'helm-net)
-(require 'thingatpt)
-(require 'google-translate-default-ui)
-(require 'core-keybindings)
+;; (require 'helm)
+;; (require 'helm-net)
+;; (require 'thingatpt)
+;; (require 'google-translate-default-ui)
+;; (require 'core-keybindings)
 
 ;; Workaround to fix google-translate-at-point
 ;; https://github.com/atykhonov/google-translate/issues/52#issuecomment-470756933
