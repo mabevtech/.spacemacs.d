@@ -241,8 +241,6 @@ before packages are loaded."
     flycheck-display-errors-delay 1.1
     ;; but dismiss them right after (just a quick peek)
     flycheck-pos-tip-timeout 3
-    ;; restrict python's syntax checking for flake8 only
-    flycheck-disabled-checkers '(python-mypy python-pylint)
     )
 
   (setq-default

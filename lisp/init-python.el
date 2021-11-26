@@ -7,6 +7,7 @@
 ;; (require 'python)
 ;; (require 'yasnippet)
 ;; (require 'core-keybindings)
+;; (require 'flycheck)
 
 ;; https://github.com/syl20bnr/spacemacs/issues/10638#issuecomment-386519064
 (eval-after-load "company"
@@ -41,6 +42,8 @@
             (with-eval-after-load 'yasnippet (setq yas-indent-line 'auto))
             (setq evil-shift-width 4)))
 
+;; Restrict syntax checking to flake8 only
+(setq-default flycheck-disabled-checkers '(python-mypy python-pylint))
 
 (provide 'init-python)
 ;;; init-python.el ends here
