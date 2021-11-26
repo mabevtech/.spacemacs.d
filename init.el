@@ -250,6 +250,9 @@ before packages are loaded."
     auto-revert-timer 4
     )
 
+  ;; Open COMMIT_EDITMSG buffer already in insert state
+  (add-hook #'git-commit-mode-hook 'evil-insert-state)
+
   ;; Do not wait that much the next avy timer char
   (setq-default avy-timeout-seconds 0.2)
 
