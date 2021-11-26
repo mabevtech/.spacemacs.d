@@ -99,6 +99,10 @@ This function should only modify configuration layer settings."
   )
 
 (defun dotspacemacs/init ()
+  "Initialization:
+This function is called at the very beginning of Spacemacs startup,
+before layer configuration.
+It should only modify the values of Spacemacs settings."
   (setq-default
    dotspacemacs-distribution 'spacemacs
    dotspacemacs-enable-emacs-pdumper nil
@@ -204,245 +208,13 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (defun projectile-dotnet-solution-p ()
-    (projectile-verify-file-wildcard "?*.sln"))
-  (with-eval-after-load 'projectile
-    (projectile-register-project-type
-     'dotnet-sln #'projectile-dotnet-solution-p
-     :src-dir "src/"
-     :test-dir "tests/"
-     :compile "cd src/ && dotnet build"
-     :run "cd src/ && dotnet run"
-     :test "cd tests/ && dotnet test"
-     :test-suffix "Tests"))
-  )
+  (add-to-list 'load-path (expand-file-name ".spacemacs.d/lisp/")))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump.")
-
-(defun mabo3n/helm-yas ()
-  "Wrapper of `spacemacs/helm-yas'.
-
-Workaround to region on visual state mode not working with yasnippets
-https://github.com/emacs-evil/evil/issues/254#issuecomment-309839802."
-  (interactive)
-  (if (not (evil-visual-state-p))
-      (spacemacs/helm-yas)
-    (let ((visual-line-selection-p (eq evil-visual-selection 'line))
-          (point-on-region-end-p (> (point) (mark))))
-      (setq yas-wrap-around-region ?y
-            evil-this-register ?y)
-      (call-interactively #'evil-substitute)
-      (evil-set-register ?y (if visual-line-selection-p
-                                (string-trim-right (evil-get-register ?y) "\n")
-                              (evil-get-register ?y)))
-      (let* ((beg (point))
-             (snippet-chosen-p (spacemacs/helm-yas)))
-        (unless snippet-chosen-p
-          (evil-paste-from-register ?y)
-          (evil-normal-state)
-          (evil-visual-state)
-          (goto-char beg)
-          (when point-on-region-end-p (exchange-point-and-mark)))
-        snippet-chosen-p))))
-
-(defun evil-yank-visual-state (beg end &rest args)
-  "Yank then restore point (i.e. <y> <gv> <escape>).
-
-Forward BEG, END and ARGS to `evil-yank'"
-  (interactive "r")
-  (apply #'evil-yank beg end args)
-  (evil-visual-restore)
-  (evil-exit-visual-state))
-
-(defun mabo3n/org-setup ()
-  (add-hook 'org-mode-hook (lambda () (setq show-trailing-whitespace t)))
-
-  (setq org-agenda-custom-commands
-        '(("n" "Agenda and all TODOs"
-           ((agenda #1="")
-            (alltodo #1#)))))
-
-  ;;; org-capture stuff
-
-  ;; Start org-capture in insert state. (adding to end of list cause
-  ;; `spacemacs//org-capture-start' manually sets to normal state)
-  (add-hook 'org-capture-mode-hook 'evil-insert-state 1)
-
-  (defconst mabo3n/default-tasks-file (expand-file-name "tasks.org" org-directory)
-    "Default tasks file.")
-  (defconst mabo3n/default-tasks-headline "New"
-    "Default tasks headline in tasks file.")
-  (defvar mabo3n/tasks-file mabo3n/default-tasks-file
-    "File to store org-capture task entries.")
-  (defvar mabo3n/tasks-headline mabo3n/default-tasks-headline
-    "Headline to store org-capture task entries.")
-
-  (defun mabo3n/org-capture-file+headline-function (&optional prompt-defaults)
-    "Captures into `mabo3n/tasks-file' within `mabo3n/tasks-headline'.
-
-This provides an alternative for org-capture's file+headline target
-with dynamic files and headlines. Code is adapted from file+headline
-option code in `org-capture-set-target-location'.
-
-If PROMPT-DEFAULTS is non-`nil', prompts for the file with
-`mabo3n/default-tasks-file' selected, and defaults to
-`mabo3n/default-tasks-headline' as headline (which can be changed
-inside the org-capture buffer with `org-capture-refile')."
-    (let ((buffer
-           (org-capture-target-buffer
-            (or (and prompt-defaults (helm-read-file-name
-                                      "File: "
-                                      ;; :test (apply-partially #'string-suffix-p ".org")
-                                      :initial-input mabo3n/default-tasks-file))
-                mabo3n/tasks-file)))
-          (headline (or (and prompt-defaults mabo3n/default-tasks-headline)
-                        mabo3n/tasks-headline)))
-      (set-buffer buffer)
-	    (unless (derived-mode-p 'org-mode)
-	      (org-display-warning
-	       (format "Capture requirement: switching buffer %S to Org mode"
-		             (current-buffer)))
-	      (org-mode))
-	    (org-capture-put-target-region-and-position)
-	    (widen)
-	    (goto-char (point-min))
-      (if (re-search-forward (format org-complex-heading-regexp-format
-					                           (regexp-quote headline))
-				                     nil t)
-	        (beginning-of-line)
-	      (goto-char (point-max))
-	      (unless (bolp) (insert "\n"))
-	      (insert "* " headline "\n")
-	      (beginning-of-line 0))))
-
-  (setq org-capture-templates
-        '(("t" "Task" entry
-           (function mabo3n/org-capture-file+headline-function)
-           "* TODO %?\n  %u\n  %a" :clock-resume t)
-
-          ("T" "Task (prompt)" entry
-           (function (lambda () (mabo3n/org-capture-file+headline-function t)))
-           "* TODO %?\n  %u\n  %a" :clock-resume t)
-
-          ("n" "Note" entry (file "")  ;; "" => `org-default-notes-file'
-           "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
-          ))
-  )
-
-(defun mabo3n/enable-auto-reload-dir-locals-vars-on-save ()
-  "From: https://emacs.stackexchange.com/a/13096."
-
-  (defun mabo3n/reload-dir-locals-for-current-buffer ()
-    "Reload dir-locals for the current buffer."
-    (interactive)
-    (let ((enable-local-variables :all))
-      (hack-dir-local-variables-non-file-buffer)))
-
-  (defun mabo3n/reload-dir-locals-for-all-buffer-in-this-directory ()
-    "Reload dir-locals for every buffer sharing `default-directory' with current's."
-    (interactive)
-    (let ((dir default-directory))
-      (dolist (buffer (buffer-list))
-        (with-current-buffer buffer
-          (when (equal default-directory dir)
-            (mabo3n/reload-dir-locals-for-current-buffer))))))
-
-  (add-hook 'emacs-lisp-mode-hook
-            (defun enable-autoreload-for-dir-locals ()
-              (when (and (buffer-file-name)
-                         (equal dir-locals-file
-                                (file-name-nondirectory (buffer-file-name))))
-                (add-hook 'after-save-hook
-                          #'mabo3n/reload-dir-locals-for-all-buffer-in-this-directory
-                          nil t)))))
-
-(defconst mabo3n/backup-files-remote-directory "d:env/"
-  "Where `mabo3n/backup-files' moves files to.")
-
-(defun mabo3n/backup-files (files &optional args)
-  "Upload FILES to cloud under `mabo3n/backup-files-remote-directory'.
-
-This builds and executes a rclone's copy command for each file in FILES.
-ARGS are passed to each of these commands.
-
-Backing up files outside of, or the whole `user-home-directory', is not allowed.
-
-See URL `https://rclone.org/commands/rclone_copy/' for more info."
-  (let ((shell-cmds))
-    (dolist (file files)
-      (catch 'continue
-        (let* ((expanded-file (expand-file-name file))
-               (dir-p (file-directory-p expanded-file))
-               (file-path-relative-to-user-home
-                (string-trim-left expanded-file
-                                  (concat "^" (file-name-as-directory
-                                               user-home-directory))))
-               (destination-file
-                (cond
-                 ((not (string-prefix-p user-home-directory expanded-file))
-                  (message "Cannot backup files outside user home directory \"%s\"."
-                           expanded-file)
-                  (throw 'continue nil))
-                 ((string= user-home-directory expanded-file)
-                  (message "Cannot backup the whole user home directory \"%s\"."
-                           expanded-file)
-                  (throw 'continue nil))
-                 (t
-                  (concat mabo3n/backup-files-remote-directory
-                          (if dir-p
-                              ;; **/foo/dir -> **/foo/dir/
-                              (file-name-as-directory
-                               file-path-relative-to-user-home)
-                            ;; **/foo/file -> **/foo/
-                            (file-name-directory
-                             file-path-relative-to-user-home)))))))
-          (setq shell-cmds
-                (cons (format "rclone copy %s %s %s"
-                              expanded-file
-                              destination-file
-                              (string-join args " "))
-                      shell-cmds)))))
-    (-> (string-join shell-cmds ";\n")
-        message
-        async-shell-command)))
-
-(defun mabo3n/backup-recent-files (files &optional args)
-  "Upload recent (24h) edited FILES to cloud.
-
-Uses `mabo3n/backup-files' with ARGS."
-  (interactive)
-  (mabo3n/backup-files files (append args '("--max-age 24"))))
-
-(defun mabo3n/backup-recent-emacs-files (&optional args)
-  "Upload recent (24h) edited Emacs files to cloud.
-
-\".spacemacs\" \"org/\" \".emacs.d/snippets/\"
-
-Uses `mabo3n/backup-recent-files' with ARGS."
-  (interactive)
-  (mabo3n/backup-recent-files
-   '(".spacemacs" "org/" ".emacs.d/private/") args))
-
-(defun mabo3n/backup-recent-dotfiles (&optional args)
-  "Upload recent (24h) edited dotfiles to cloud.
-
-\".spacemacs\" \"org/\" \".emacs.d/private/\"
-\".gitconfig\"
-\".bashrc\" \".bash_profile\" \".bash_aliases\"
-\".config/nvim/\" \".vimrc\" \".vim/\"
-
-Uses `mabo3n/backup-recent-files' with ARGS."
-  (interactive)
-  (mabo3n/backup-recent-files
-   '(".spacemacs" "org/" ".emacs.d/private/"
-     ".gitconfig"
-     ".bashrc" ".bash_profile" ".bash_aliases"
-     ".config/nvim/" ".vimrc" ".vim/")
-   args))
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -451,13 +223,16 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  ;; Use a box cursor on insert/hybrid modes instead of bar one
-  (setq-default evil-insert-state-cursor (list (car evil-insert-state-cursor) 'box)
-                evil-hybrid-state-cursor (list (car evil-hybrid-state-cursor) 'box))
+  (require 'init-emacs)
+  (require 'init-evil)
+  (require 'init-org)
+  (require 'init-yas)
+  (require 'init-backup)
+  (require 'init-python)
+  (require 'init-csharp)
 
-  (mabo3n/org-setup)
-
-  (mabo3n/enable-auto-reload-dir-locals-vars-on-save)
+  ;; No fringes ~ on empty lines
+  (spacemacs/toggle-vi-tilde-fringe-off)
 
   (setq-default
     ;; Turn flycheck on automatically for all global modes
@@ -483,93 +258,25 @@ before packages are loaded."
   ;; Do not auto add backslashes when inserting single quotes
   (setq-default sp-escape-quotes-after-insert nil)
 
-  ;; Make sure that emacs will have $PATH variables from default shell
-  (when (memq window-system '(mac ns))
-    (exec-path-from-shell-initialize))
+  ;; Make query replace not stopping when encountering read-only text
+  ;; This is useful while replacing on helm-ag-edit buffer
+  (setq query-replace-skip-read-only t)
 
-  (setq garbage-collection-messages t)
+  ;; Quit evil-numbers-transient-state with Escape
+  ;; (with-eval-after-load evil-numbers
+  ;;   (define-key spacemacs/evil-numbers-transient-state/keymap
+  ;;     (kbd "<escape>") (cdr (assq ?q spacemacs/evil-numbers-transient-state/keymap))))
+
+  (setq company-tooltip-maximum-width 100)
 
   ;; Always use company-mode for completion (instead of auto-complete)
   (global-company-mode)
 
-  ;; Add custom company backends
-  ;; (add-to-list 'company-backends #'company-tabnine)
-  ;; https://github.com/syl20bnr/spacemacs/issues/10638#issuecomment-386519064
-  (eval-after-load "company"
-    '(add-to-list 'company-backends 'company-anaconda))
-
-  ;; No fringes ~ on empty lines
-  (spacemacs/toggle-vi-tilde-fringe-off)
-
-  ;; Enable Omnisharp's detailed log buffer
-  ;; (setq-default omnisharp-debug t)
-
-  ;; Prevent evil from overriding some edebug keys (e.g. c, i, n)
-  (add-hook 'edebug-mode-hook 'evil-normalize-keymaps)
-
-  (add-hook 'python-mode-hook
-            (lambda ()
-              ;; Override 'fixed value so regions work with snippets ($0)
-              (with-eval-after-load 'yasnippet (setq yas-indent-line 'auto))
-              (setq evil-shift-width 4)))
-
-  ;; Make evil-indent use 4 spaces under csharp-mode
-  (add-hook 'csharp-mode-hook
-            (lambda ()
-              (setq evil-shift-width c-basic-offset)))
-
-  (defun switch-to-omnisharp-log-buffer ()
-    (interactive)
-    (switch-to-buffer "*omnisharp-log*"))
-  (defun switch-to-omnisharp-log-buffer-other-window ()
-    (interactive)
-    (switch-to-buffer-other-window "*omnisharp-log*"))
-  (spacemacs/set-leader-keys-for-major-mode 'csharp-mode
-    "s l" #'switch-to-omnisharp-log-buffer
-    "s L" #'switch-to-omnisharp-log-buffer-other-window)
-
-  (setq omnisharp-imenu-support t)
-
-  ;; Workaround to fix google-translate-at-point
-  ;; https://github.com/atykhonov/google-translate/issues/52#issuecomment-470756933
-  (defun google-translate--search-tkk ()
-    "Search TKK."
-    (list 430675 2721866130))
-
-  ;; ------ Key bindings ------
-  (define-key evil-visual-state-map (kbd "y") #'evil-yank-visual-state)
-  (define-key evil-insert-state-map (kbd "C-y") #'yank)
+  ;;; Key bindings
 
   ;; Trigger auto completion
   (define-key evil-insert-state-map (kbd "C-SPC") #'company-manual-begin)
   (define-key evil-hybrid-state-map (kbd "C-SPC") #'company-manual-begin)
-  ;; Open yasnippets menu
-  (define-key evil-insert-state-map (kbd "C-;") #'mabo3n/helm-yas)
-  (define-key evil-normal-state-map (kbd "C-;") #'mabo3n/helm-yas)
-  (define-key evil-visual-state-map (kbd "C-;") #'mabo3n/helm-yas)
-  (define-key evil-hybrid-state-map (kbd "C-;") #'mabo3n/helm-yas)
-
-  ;; Use regex searches by default
-  (global-set-key (kbd "C-s") #'isearch-forward-regexp)
-  (global-set-key (kbd "C-r") #'isearch-backward-regexp)
-  (global-set-key (kbd "C-M-s") #'isearch-forward)
-  (global-set-key (kbd "C-M-r") #'isearch-backward)
-
-  ;; Bind tab key to autocomplete
-
-  ;; (define-key evil-insert-state-map (kbd "<tab>") 'hippie-expand)
-  ;; (add-hook 'org-mode-hook
-  ;;           (lambda ()
-  ;;             (evil-define-key '(insert normal) org-mode-map (kbd "<tab>") 'org-cycle)))
-
-  ;; (dolist (mode-map '(csharp-mode-map
-  ;;                     python-mode-map))
-  ;;   (evil-define-key 'insert mode-map (kbd "<tab>") #'hippie-expand))
-
-  (evil-define-key (list 'insert 'hybrid) csharp-mode-map (kbd "<tab>") #'hippie-expand)
-  (evil-define-key (list 'insert 'hybrid) python-mode-map (kbd "<tab>") #'hippie-expand)
-  (evil-define-key (list 'insert 'hybrid) markdown-mode-map (kbd "<tab>") #'hippie-expand)
-  (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand)
 
   ;; Treemacs
   (with-eval-after-load 'treemacs
@@ -589,59 +296,14 @@ before packages are loaded."
       ;; <x> to delete
       (kbd "x") #'treemacs-delete))
 
-  ;; Function to evaluate AND OUTPUT current line or selection on Python mode
-  (defun python-shell-send-region-or-line-and-show-output
-      (start end &optional msg)
-    "Alternative to python-shell-send-region."
-    (interactive
-     (list (if mark-active (region-beginning) (line-beginning-position))
-          (if mark-active (region-end) (line-end-position))
-          t))
-    (let* ((region (buffer-substring-no-properties start end))
-           (process (python-shell-get-process-or-error msg)))
-      (message "Sent: %s..." (string-trim region))
-      (python-shell-send-string region process)))
-  ;; Add function to major mode menu
-  (spacemacs/set-leader-keys-for-major-mode
-    'python-mode "o s l" 'python-shell-send-region-or-line-and-show-output)
-  ;; Call it with S-return
-  (evil-define-key (list 'insert 'hybrid 'normal) python-mode-map
-    (kbd "<C-return>") 'python-shell-send-region-or-line-and-show-output)
-
-  ;; <S-return> on restclient mode
   (evil-define-key (list 'insert 'hybrid 'normal) restclient-mode-map
     (kbd "<C-return>") 'restclient-http-send-current-stay-in-window)
-
-  ;; <S-return> and <C-return> on scheme-mode
-
-  ;; pq eh tao dificil fazer isso funcionar?
-  ;; (defun with-current-line-as-default-region (FUNC)
-  ;;   (let* ((start (if mark-active (region-beginning)
-  ;;                   (line-beginning-position)))
-  ;;          (end (if mark-active (region-end)
-  ;;                 (line-end-position))))
-  ;;     (apply FUNC start end)))
-
-  ;; (evil-define-key 'normal scheme-mode-map
-  ;;   (kbd "<C-return>") '(lambda ()
-  ;;                         (interactive)
-  ;;                         (with-current-line-as-default-region
-  ;;                          #'geiser-eval-region)))
 
   (evil-define-key (list 'insert 'hybrid 'normal) scheme-mode-map
     (kbd "<C-return>") 'geiser-eval-region)
 
   (evil-define-key (list 'insert 'hybrid 'normal) scheme-mode-map
     (kbd "<S-return>") 'geiser-eval-region-and-go)
-
-  ;; Genebra auto save file names are too long.
-  ;; Name them with their sha1 instead
-  (advice-add 'make-auto-save-file-name :around
-              #'my-shorten-auto-save-file-name)
-  (defun my-shorten-auto-save-file-name (&rest args)
-    (let ((buffer-file-name
-           (when buffer-file-name (sha1 buffer-file-name))))
-      (apply args)))
 
   (spacemacs/set-leader-keys
     "x r b" #'regexp-builder
@@ -650,71 +312,6 @@ before packages are loaded."
     "F F" #'make-frame
     "F <tab>" #'other-frame
     )
-
-  ;;; Better usage of google suggest/translate
-
-  (defun my-helm-google-suggest (&optional input)
-    (interactive)
-    (let ((input (or (and (use-region-p)
-                          (buffer-substring-no-properties (region-beginning) (region-end)))
-                     input))
-          ;; This prevents some character repetition while typing
-          (helm-input-idle-delay 0.4))
-      (helm :sources 'helm-source-google-suggest
-            :buffer "*helm google*"
-            :input input
-            :delayed t)))
-
-  (defun my-helm-google-suggest-at-point ()
-    (interactive)
-    (let ((input (word-at-point t)))
-      (unless input (message "Nothing at point."))
-      (my-helm-google-suggest input)))
-
-  (defun my-google-translate-query-translate (&rest args)
-    (interactive)
-    (if (use-region-p)
-        (apply #'google-translate-at-point args)
-      (apply #'google-translate-query-translate args)))
-
-  (defun my-google-translate-query-translate-reverse (&rest args)
-    (interactive)
-    (if (use-region-p)
-        (apply #'google-translate-at-point-reverse args)
-      (apply #'google-translate-query-translate-reverse args)))
-
-  (spacemacs/set-leader-keys
-    "s G" (key-binding (kbd "SPC s g")) ;; bind +grep search to capital g
-    "s g" nil                           ;; unbind +grep stuff from small g
-    "s g g" #'my-helm-google-suggest
-    "s g G" #'my-helm-google-suggest-at-point
-    "s g t" (key-binding (kbd "SPC x g"))
-    "s g t t" #'my-google-translate-query-translate
-    "s g t T" #'google-translate-at-point
-    "s g t v" #'my-google-translate-query-translate-reverse
-    "s g t V" #'google-translate-at-point-reverse)
-  (spacemacs/declare-prefix "s G" "grep")
-  (spacemacs/declare-prefix "s g" "Google")
-  (spacemacs/declare-prefix "s g t" "translate")
-
-  (setq google-translate-pop-up-buffer-set-focus t)
-
-  ;; Make query replace not stopping when encountering read-only text
-  ;; This is useful while replacing on helm-ag-edit buffer
-  (setq query-replace-skip-read-only t)
-
-  ;; Quit evil-numbers-transient-state with Escape
-  ;; (with-eval-after-load evil-numbers
-  ;;   (define-key spacemacs/evil-numbers-transient-state/keymap
-  ;;     (kbd "<escape>") (cdr (assq ?q spacemacs/evil-numbers-transient-state/keymap))))
-
-  (setq company-tooltip-maximum-width 100)
-
-  (define-key evil-inner-text-objects-map "f" #'evil-cp-inner-defun)
-  (define-key evil-outer-text-objects-map "f" #'evil-cp-a-defun)
-
-  ;; (evil-make-overriding-map Info-mode-map nil)
-  ;; (add-hook 'Info-mode-hook #'evil-normalize-keymaps)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
