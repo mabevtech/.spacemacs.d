@@ -64,6 +64,10 @@ inside the `org-capture' buffer with `org-capture-refile')."
          (function (lambda () (mabo3n/org-capture-file+headline-function t)))
          "* TODO %?\n  %u\n  %a" :clock-resume t)
 
+        ("j" "Journal entry" entry
+         (file+olp+datetree "journal.org")
+         "* %U\n  %?" :empty-lines 1)
+
         ("n" "Note" entry (file "")  ;; "" => `org-default-notes-file'
          "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
         ))
