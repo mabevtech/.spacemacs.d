@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# contributor : mabo3n
+# name: public enum ... { CategoryA, CategoryB, }
+# key: enum
+# --
+public enum ${1:Name}
+{
+    ${2:CategoryA},
+    ${3:CategoryB},$0
+}

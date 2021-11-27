@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: import numpy as np
+# key: importnp
+# --
+import numpy as np

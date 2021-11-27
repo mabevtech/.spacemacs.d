@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: using (var ... = ...) { ... }
+# key: using
+# --
+using (var ${1:disposable} = ${2:new ${3:Disposable}($4)})
+{
+    $0
+}

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: private readonly IDep dep;
+# key: dep
+# --
+private readonly I${1:$(concat
+                         (upcase (substring yas-text 0 1))
+                         (substring yas-text 1))} _${1:component};

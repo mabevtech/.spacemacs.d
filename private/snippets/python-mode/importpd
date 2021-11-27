@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: import pandas as pd
+# key: importpd
+# --
+import pandas as pd

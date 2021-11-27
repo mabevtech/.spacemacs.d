@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: class { ... }
+# key: class
+# --
+${3:public} class ${1:SomeClass}${2:$(if (string= yas-text "") "" " : ")}${2:Inheritance}
+{
+    $0
+}

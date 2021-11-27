@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: [Fact] public void ..._Should..._When... { ... }
+# key: test
+# --
+[Fact]
+public void ${1:Operation}_Should${2:Expectation}${3:$(if (string= yas-text "") "" "_When")}${3:Predicate}()
+{
+    $0
+}

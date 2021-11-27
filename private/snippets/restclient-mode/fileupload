@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: < /Users/mabo3n/Desktop/file
+# contributor: mabo3n
+# key: fileupload
+# --
+Content-type: text/plain
+
+< ${1:/Users/${2:mabo3n}/${3:Desktop/}${4:file}}

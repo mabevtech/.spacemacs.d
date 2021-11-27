@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# contributor : mabo3n
+# name: try { ... } catch (ex) { ... }
+# key: tryc
+# --
+try
+{
+    $0
+}
+catch (${1:Exception} ex)
+{
+    ${2:Console.WriteLine(ex.ToString());}
+}

@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: private Field field;
+# key: field
+# --
+${3:public} ${2:${1:$(concat
+                       (upcase (substring yas-text 0 1))
+                       (substring yas-text 1))}} ${1:field};$0

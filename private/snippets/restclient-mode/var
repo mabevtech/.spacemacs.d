@@ -1,0 +1,6 @@
+# -*- mode: restclient -*-
+# name: :var = value
+# contributor : mabo3n
+# key: var
+# --
+:${1:var} ${2:$(if (string-prefix-p "(" yas-text) ":" "")}= ${2:value}

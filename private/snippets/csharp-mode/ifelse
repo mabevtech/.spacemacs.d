@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: if (...) { ... } else { ... }
+# key: ifelse
+# --
+if (${1:predicate})
+{
+    $2
+}
+else
+{
+    $0
+}

@@ -1,0 +1,13 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: public static void Method(this ...) { ... }
+# key: emethod
+# key: extensionmethod
+# key: extm
+# --
+public static ${3:void} ${1:Method}(this ${2:Type} ${3:${2:$(concat
+                                                              (downcase (substring yas-text 0 1))
+                                                              (substring yas-text 1))}}${4:$(if (string= yas-text "") "" ", ")}${4:args})
+{
+    $0
+}

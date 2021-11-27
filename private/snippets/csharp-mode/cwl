@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: Console.WriteLine()
+# key: cwl
+# --
+Console.WriteLine($0);

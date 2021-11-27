@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: -> run-hook (restclient-set-var ":var" (cdr (assq 'field (json-read))))
+# contributor : mabo3n
+# key: setvar
+# --
+-> run-hook (restclient-set-var ":${1:var}" (cdr (assq '${2:field} (json-read))))

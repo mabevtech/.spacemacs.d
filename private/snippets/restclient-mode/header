@@ -1,0 +1,6 @@
+# -*- mode: restclient -*-
+# name: Header: value
+# contributor : mabo3n
+# key: header
+# --
+${1:Header}: ${2:value}

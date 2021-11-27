@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: (url-hexify-string "data")
+# key: encodeddata
+# contributor: mabo3n
+# --
+(url-hexify-string "${1:data}")

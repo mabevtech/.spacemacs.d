@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: const fn = args => ... ;
+# key: fn
+# --
+const ${1:fn} = ${2:$(when (string-match-p "," yas-text) "(")}${2:args}${2:$(when (string-match-p "," yas-text) ")")} => $0;

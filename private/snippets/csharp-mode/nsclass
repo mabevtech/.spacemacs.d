@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: namespace { public class { ... } }
+# key: nsclass
+# --
+namespace ${2:SomeNamespace}
+{
+    public class ${1:SomeClass}
+    {
+        $0
+    }
+}
