@@ -69,7 +69,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
          "* %U\n  %?" :empty-lines 1)
 
         ("n" "Note" entry (file "")  ;; "" => `org-default-notes-file'
-         "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
+         "* %? :NOTE:\n%U" :clock-resume t)
         ))
 
 ;; Open org capture buffer in insert state (Adding to end of list
