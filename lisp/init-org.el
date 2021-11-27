@@ -58,11 +58,11 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (setq org-capture-templates
       '(("t" "Task" entry
          (function mabo3n/org-capture-file+headline-function)
-         "* TODO %?\n  %u\n  %a" :clock-resume t)
+         "* TODO %?\n  %U\n  %a" :clock-resume t)
 
         ("T" "Task (prompt)" entry
          (function (lambda () (mabo3n/org-capture-file+headline-function t)))
-         "* TODO %?\n  %u\n  %a" :clock-resume t)
+         "* TODO %?\n  %U\n  %a" :clock-resume t)
 
         ("j" "Journal entry" entry
          (file+olp+datetree "journal.org")
