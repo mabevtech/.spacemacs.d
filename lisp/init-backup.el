@@ -74,9 +74,11 @@ Uses `mabo3n/backup-files' with ARGS."
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
   (mabo3n/backup-recent-files
-   '(".gitconfig"
-     ".bashrc" ".bash_profile" ".bash_aliases"
-     ".config/nvim/" ".vimrc" ".vim/")
+   (mapcar (apply-partially 'concat (file-name-as-directory
+                                     user-home-directory))
+           '(".gitconfig"
+             ".bashrc" ".bash_profile" ".bash_aliases"
+             ".config/nvim/" ".vimrc" ".vim/"))
    args))
 
 (defun mabo3n/backup-recent-org-files (&optional args)
@@ -84,7 +86,8 @@ Uses `mabo3n/backup-recent-files' with ARGS."
 
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
-  (mabo3n/backup-recent-files '("org/") args))
+  (mabo3n/backup-recent-files
+   `(,(expand-file-name "org/" user-home-directory)) args))
 
 (provide 'init-backup)
 ;;; init-backup.el ends here
