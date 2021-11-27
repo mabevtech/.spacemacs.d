@@ -64,20 +64,9 @@ Uses `mabo3n/backup-files' with ARGS."
   (interactive)
   (mabo3n/backup-files files (append args '("--max-age 24"))))
 
-(defun mabo3n/backup-recent-emacs-files (&optional args)
-  "Upload recent (24h) edited Emacs files to cloud.
-
-\".spacemacs\" \"org/\" \".emacs.d/snippets/\"
-
-Uses `mabo3n/backup-recent-files' with ARGS."
-  (interactive)
-  (mabo3n/backup-recent-files
-   '(".spacemacs" "org/" ".emacs.d/private/") args))
-
 (defun mabo3n/backup-recent-dotfiles (&optional args)
   "Upload recent (24h) edited dotfiles to cloud.
 
-\".spacemacs\" \"org/\" \".emacs.d/private/\"
 \".gitconfig\"
 \".bashrc\" \".bash_profile\" \".bash_aliases\"
 \".config/nvim/\" \".vimrc\" \".vim/\"
@@ -85,11 +74,17 @@ Uses `mabo3n/backup-recent-files' with ARGS."
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
   (mabo3n/backup-recent-files
-   '(".spacemacs" "org/" ".emacs.d/private/"
-     ".gitconfig"
+   '(".gitconfig"
      ".bashrc" ".bash_profile" ".bash_aliases"
      ".config/nvim/" ".vimrc" ".vim/")
    args))
+
+(defun mabo3n/backup-recent-org-files (&optional args)
+  "Upload recent (24h) edited org files to cloud.
+
+Uses `mabo3n/backup-recent-files' with ARGS."
+  (interactive)
+  (mabo3n/backup-recent-files '("org/") args))
 
 (provide 'init-backup)
 ;;; init-backup.el ends here
