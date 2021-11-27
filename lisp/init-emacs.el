@@ -55,5 +55,9 @@
 (advice-add 'make-auto-save-file-name :around
             #'my-shorten-auto-save-file-name)
 
+;; Make query replace not stop when encountering read-only text
+;; This is useful while replacing on helm-ag-edit buffer
+(setq query-replace-skip-read-only t)
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here

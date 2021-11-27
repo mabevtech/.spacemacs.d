@@ -259,10 +259,6 @@ before packages are loaded."
   ;; Do not auto add backslashes when inserting single quotes
   (setq-default sp-escape-quotes-after-insert nil)
 
-  ;; Make query replace not stopping when encountering read-only text
-  ;; This is useful while replacing on helm-ag-edit buffer
-  (setq query-replace-skip-read-only t)
-
   ;; Quit evil-numbers-transient-state with Escape
   ;; (with-eval-after-load evil-numbers
   ;;   (define-key spacemacs/evil-numbers-transient-state/keymap
