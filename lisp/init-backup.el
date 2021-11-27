@@ -81,12 +81,12 @@ Uses `mabo3n/backup-recent-files' with ARGS."
              ".config/nvim/" ".vimrc" ".vim/"))
    args))
 
-(defun mabo3n/backup-recent-org-files (&optional args)
-  "Upload recent (24h) edited org files to cloud.
+(defun mabo3n/backup-org-files (&optional args)
+  "Upload org files to cloud.
 
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
-  (mabo3n/backup-recent-files
+  (mabo3n/backup-files
    `(,(expand-file-name "org/" user-home-directory)) args))
 
 (provide 'init-backup)
