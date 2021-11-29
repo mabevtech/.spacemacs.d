@@ -11,6 +11,53 @@
 (defconst mabo3n/backup-files-remote-directory "d:env/"
   "Where `mabo3n/backup-files' moves files to.")
 
+(defun mabo3n/backup-files--get-remote-path (file)
+  "Get remote path for FILE."
+  (let ((expanded-file (expand-file-name file)))
+    (when (string-prefix-p user-home-directory expanded-file)
+      (let ((dir-p (file-directory-p expanded-file))
+            (file-path-relative-to-user-home
+             (string-trim-left expanded-file
+                               (concat "^" (file-name-as-directory
+                                            user-home-directory)))))
+        (concat mabo3n/backup-files-remote-directory
+                (if dir-p
+                    ;; **/foo/dir -> **/foo/dir/
+                    (file-name-as-directory
+                     file-path-relative-to-user-home)
+                  ;; **/foo/file -> **/foo/
+                  (file-name-directory
+                   file-path-relative-to-user-home)))))))
+
+(defun mabo3n/backup-files--build-backup-command (files &optional args)
+  "Generate a shell command to backup each file in FILES.
+
+ARGS is a list of string arguments forwarded to rclone."
+  (let ((shell-cmds))
+    (dolist (file files)
+      (catch 'continue
+        (let* ((expanded-file (expand-file-name file))
+               (destination-file
+                (cond
+                 ((not (string-prefix-p user-home-directory expanded-file))
+                  (message "Cannot backup file from outside user home directory \"%s\"."
+                           expanded-file)
+                  (throw 'continue nil))
+                 ((string= user-home-directory expanded-file)
+                  (message "Cannot backup the whole user home directory \"%s\"."
+                           expanded-file)
+                  (throw 'continue nil))
+                 (t (mabo3n/backup-files--get-remote-path expanded-file)))))
+          (if (eq destination-file nil)
+              (message "Couldn't get remote path for \"%s\"" expanded-file)
+            (setq shell-cmds
+                  (cons (format "rclone copy %s %s %s"
+                                expanded-file
+                                destination-file
+                                (string-join args " "))
+                        shell-cmds))))))
+    (string-join shell-cmds ";\n")))
+
 (defun mabo3n/backup-files (files &optional args)
   "Upload FILES to cloud under `mabo3n/backup-files-remote-directory'.
 
@@ -20,49 +67,14 @@ ARGS are passed to each of these commands.
 Backing up files outside of, or the whole `user-home-directory', is not allowed.
 
 See URL `https://rclone.org/commands/rclone_copy/' for more info."
-  (let ((shell-cmds))
-    (dolist (file files)
-      (catch 'continue
-        (let* ((expanded-file (expand-file-name file))
-               (dir-p (file-directory-p expanded-file))
-               (file-path-relative-to-user-home
-                (string-trim-left expanded-file
-                                  (concat "^" (file-name-as-directory
-                                               user-home-directory))))
-               (destination-file
-                (cond
-                 ((not (string-prefix-p user-home-directory expanded-file))
-                  (message "Cannot backup files outside user home directory \"%s\"."
-                           expanded-file)
-                  (throw 'continue nil))
-                 ((string= user-home-directory expanded-file)
-                  (message "Cannot backup the whole user home directory \"%s\"."
-                           expanded-file)
-                  (throw 'continue nil))
-                 (t
-                  (concat mabo3n/backup-files-remote-directory
-                          (if dir-p
-                              ;; **/foo/dir -> **/foo/dir/
-                              (file-name-as-directory
-                               file-path-relative-to-user-home)
-                            ;; **/foo/file -> **/foo/
-                            (file-name-directory
-                             file-path-relative-to-user-home)))))))
-          (setq shell-cmds
-                (cons (format "rclone copy %s %s %s"
-                              expanded-file
-                              destination-file
-                              (string-join args " "))
-                      shell-cmds)))))
-    (-> (string-join shell-cmds ";\n")
-        message
-        async-shell-command)))
+  (-> (mabo3n/backup-files--build-backup-command files args)
+      message
+      async-shell-command))
 
 (defun mabo3n/backup-recent-files (files &optional args)
   "Upload recent (24h) edited FILES to cloud.
 
 Uses `mabo3n/backup-files' with ARGS."
-  (interactive)
   (mabo3n/backup-files files (append args '("--max-age 24"))))
 
 (defun mabo3n/backup-recent-dotfiles (&optional args)
