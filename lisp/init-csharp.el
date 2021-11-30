@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-;; (require 'yasnippet)
 ;; (require 'evil)
 ;; (require 'helm)
 ;; (require 'projectile)
