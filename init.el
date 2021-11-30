@@ -228,6 +228,7 @@ before packages are loaded."
   (require 'init-org)
   (require 'init-yas)
   (require 'init-backup)
+  (require 'init-google)
   (require 'init-python)
   (require 'init-csharp)
 
