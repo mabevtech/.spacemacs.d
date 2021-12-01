@@ -229,6 +229,7 @@ before packages are loaded."
   (require 'init-yas)
   (require 'init-backup)
   (require 'init-google)
+  (require 'init-elisp)
   (require 'init-python)
   (require 'init-csharp)
 
