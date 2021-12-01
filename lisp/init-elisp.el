@@ -7,7 +7,7 @@
 ;;; snippet expansion
 
 (add-hook 'emacs-lisp-mode-hook
-          'mabo3n/enable-snippet-expansion-on-completion)
+          'mabo3n/prioritize-snippet-expansion-on-completion)
 
 (provide 'init-elisp)
 ;;; init-elisp.el ends here

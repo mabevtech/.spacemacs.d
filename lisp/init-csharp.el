@@ -48,7 +48,7 @@
 ;;; snippet expansion
 
 (add-hook 'csharp-mode-hook
-          'mabo3n/enable-snippet-expansion-on-completion)
+          'mabo3n/prioritize-snippet-expansion-on-completion)
 
 ;;; misc
 
