@@ -42,8 +42,7 @@
   "s l" #'switch-to-omnisharp-log-buffer
   "s L" #'switch-to-omnisharp-log-buffer-other-window)
 
-(setq omnisharp-imenu-support t)
-(setq-default omnisharp-debug t
+(setq-default omnisharp-debug nil
               omnisharp-imenu-support t)
 
 ;;; snippet expansion
