@@ -52,9 +52,12 @@
 
 ;;; misc
 
+(defun mabo3n/csharp-set-shift-width ()
+  (interactive)
+  (setq-default evil-shift-width c-basic-offset))
+
 (add-hook 'csharp-mode-hook
-          (lambda ()
-            (setq evil-shift-width c-basic-offset)))
+          'mabo3n/csharp-set-shift-width)
 
 (provide 'init-csharp)
 ;;; init-csharp.el ends here
