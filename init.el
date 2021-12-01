@@ -311,9 +311,9 @@ before packages are loaded."
     "F <tab>" #'other-frame
     )
 
-  (evil-define-key (list 'insert 'hybrid) python-mode-map (kbd "<tab>") #'hippie-expand)
   (evil-define-key (list 'insert 'hybrid) markdown-mode-map (kbd "<tab>") #'hippie-expand)
-  (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand))
+  (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand)
+  )
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.

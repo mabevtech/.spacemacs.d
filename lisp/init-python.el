@@ -36,6 +36,8 @@
 (evil-define-key (list 'insert 'hybrid 'normal) python-mode-map
   (kbd "<C-return>") 'python-shell-send-region-or-line-and-show-output)
 
+;; (evil-define-key (list 'insert 'hybrid) python-mode-map (kbd "<tab>") #'hippie-expand)
+
 ;;; misc
 
 (defun mabo3n/python-set-shift-width ()
