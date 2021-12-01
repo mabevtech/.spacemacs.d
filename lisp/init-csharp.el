@@ -7,6 +7,8 @@
 ;; (require 'projectile)
 ;; (require 'omnisharp)
 ;; (require 'core-keybindings)
+(require 'init-prog)
+(require 'init-c)
 
 ;;; projectile
 
@@ -43,6 +45,11 @@
 (setq omnisharp-imenu-support t)
 (setq-default omnisharp-debug t
               omnisharp-imenu-support t)
+
+;;; snippet expansion
+
+(add-hook 'csharp-mode-hook
+          'mabo3n/enable-snippet-expansion-on-completion)
 
 ;;; misc
 

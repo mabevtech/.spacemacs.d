@@ -8,6 +8,7 @@
 ;; (require 'yasnippet)
 ;; (require 'core-keybindings)
 ;; (require 'flycheck)
+(require 'init-prog)
 
 ;; https://github.com/syl20bnr/spacemacs/issues/10638#issuecomment-386519064
 (eval-after-load "company"
