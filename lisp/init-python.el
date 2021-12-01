@@ -36,12 +36,22 @@
 (evil-define-key (list 'insert 'hybrid 'normal) python-mode-map
   (kbd "<C-return>") 'python-shell-send-region-or-line-and-show-output)
 
+;;; misc
+
+(defun mabo3n/python-set-shift-width ()
+  (interactive)
+  (setq-default evil-shift-width 4))
 
 (add-hook 'python-mode-hook
-          (lambda ()
-            ;; Override 'fixed value so regions work with snippets ($0)
-            (with-eval-after-load 'yasnippet (setq yas-indent-line 'auto))
-            (setq evil-shift-width 4)))
+          'mabo3n/python-set-shift-width)
+
+(defun mabo3n/python-fix-snippet-expansion-with-regions ()
+  "Override `yas-indent-line' so regions work with snippets ($0)."
+  (with-eval-after-load 'yasnippet
+    (setq yas-indent-line 'auto)))
+
+(add-hook 'python-mode-hook
+          'mabo3n/python-fix-snippet-expansion-with-regions)
 
 ;; Restrict syntax checking to flake8 only
 (setq-default flycheck-disabled-checkers '(python-mypy python-pylint))
