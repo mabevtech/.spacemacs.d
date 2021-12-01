@@ -12,13 +12,13 @@
 
 ;;; projectile
 
-(defun projectile-dotnet-solution-p ()
+(defun mabo3n/projectile-dotnet-solution-p ()
   "Whether the current project is a dotnet solution."
   (projectile-verify-file-wildcard "?*.sln"))
 
 (with-eval-after-load 'projectile
   (projectile-register-project-type
-   'dotnet-sln #'projectile-dotnet-solution-p
+   'dotnet-sln #'mabo3n/projectile-dotnet-solution-p
    :src-dir "src/"
    :test-dir "tests/"
    :compile "cd src/ && dotnet build"
@@ -28,19 +28,19 @@
 
 ;;; omnisharp
 
-(defun switch-to-omnisharp-log-buffer ()
+(defun mabo3n/switch-to-omnisharp-log-buffer ()
   "Switch to omnisharp log buffer."
   (interactive)
   (switch-to-buffer "*omnisharp-log*"))
 
-(defun switch-to-omnisharp-log-buffer-other-window ()
+(defun mabo3n/switch-to-omnisharp-log-buffer-other-window ()
   "Opens omnisharp log buffer in another window."
   (interactive)
   (switch-to-buffer-other-window "*omnisharp-log*"))
 
 (spacemacs/set-leader-keys-for-major-mode 'csharp-mode
-  "s l" #'switch-to-omnisharp-log-buffer
-  "s L" #'switch-to-omnisharp-log-buffer-other-window)
+  "s l" #'mabo3n/switch-to-omnisharp-log-buffer
+  "s L" #'mabo3n/switch-to-omnisharp-log-buffer-other-window)
 
 (setq-default omnisharp-debug nil
               omnisharp-imenu-support t)
