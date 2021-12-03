@@ -7,6 +7,7 @@
 ;; (require 'simple)
 ;; (require 'core-load-paths)
 ;; (require 'core-dotspacemacs)
+;; (require 'helm)
 
 (defconst mabo3n/backup-files-remote-directory "d:env/"
   "Where `mabo3n/backup-file' moves files to.")
@@ -83,8 +84,14 @@ is not allowed (they are ignored).
 
 See URL `https://rclone.org/commands/rclone_copy/' for more info
 about rclone's copy command behavior."
-  (interactive "fBackup file: \nP")
-  (let ((args (or (and (consp current-prefix-arg)
+  (interactive "i\nP")
+  (let ((file (or file
+                  (and (called-interactively-p 'any)
+                       (helm-read-file-name
+                        "File: "
+                        :initial-input (or (buffer-file-name)
+                                           default-directory)))))
+        (args (or (and (consp current-prefix-arg)
                        (cons (read-string "args: ") nil))
                   args)))
     (-> (mabo3n/backup-files--build-backup-command file args)
