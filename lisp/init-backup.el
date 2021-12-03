@@ -70,8 +70,27 @@ ARGS is a list of string arguments forwarded to rclone."
             (funcall fn)))
       command)))
 
-(defun mabo3n/backup-file (file &optional args)
-  "Upload FILE to cloud under `mabo3n/backup-files-remote-directory'.
+(defun mabo3n/backup-files--run-command (command)
+  "Run COMMAND in a dedicated buffer, printing the exit status when done."
+  (let ((buf "*Backup files*"))
+    (with-current-buffer-window buf nil nil
+      (async-shell-command command buf buf)
+      (insert command)
+      (shell-mode)
+      (evil-normal-state)
+      (let ((process (get-buffer-process buf)))
+        (set-process-sentinel
+         process
+         (lambda (_ signal)
+           (when (memq (process-status process) '(exit signal))
+             (with-current-buffer buf
+               (goto-char (point-max))
+               (let ((inhibit-read-only t))
+                 (insert "\n" (substring signal 0 -1) ".")
+                 (help-mode)))))))))
+
+  (defun mabo3n/backup-file (file &optional args)
+    "Upload FILE to cloud under `mabo3n/backup-files-remote-directory'.
 
 This builds and executes an rclone's copy command for FILE
 using each arg in ARGS. FILE can be a path or list of paths.
@@ -84,21 +103,20 @@ is not allowed (they are ignored).
 
 See URL `https://rclone.org/commands/rclone_copy/' for more info
 about rclone's copy command behavior."
-  (interactive "i\nP")
-  (let ((file (or file
-                  (and (called-interactively-p 'any)
-                       (helm-read-file-name
-                        "File: "
-                        :initial-input (or (buffer-file-name)
-                                           default-directory)))))
-        (args (or (and (consp current-prefix-arg)
-                       (list (read-string "args: ")))
-                  args)))
-    (-> (if (listp file) file (list file))
-        (mabo3n/backup-files--build-backup-command args)
-        (string-join ";\n")
-        message
-        async-shell-command)))
+    (interactive "i\nP")
+    (let* ((file (or file
+                     (and (called-interactively-p 'any)
+                          (helm-read-file-name
+                           "File: "
+                           :initial-input (or (buffer-file-name)
+                                              default-directory)))))
+           (args (or (and (consp current-prefix-arg)
+                          (list (read-string "args: ")))
+                     args))
+           (command (-> (if (listp file) file (list file))
+                        (mabo3n/backup-files--build-backup-command args)
+                        (string-join ";\n"))))
+      (mabo3n/backup-files--run-command command))))
 
 (defun mabo3n/backup-recent-files (files &optional args)
   "Upload recent (24h) edited FILES to cloud.
@@ -147,13 +165,12 @@ Optional COMMIT-MSG can be provided, using
                          mabo3n/backup-dotspacemacs-default-commit-message))))
   (let* ((default-directory dotspacemacs-directory)
          (msg (or commit-msg
-                  mabo3n/backup-dotspacemacs-default-commit-message)))
-    (-> (format (concat "git add ."
-                        " && git commit -m \"%s\""
-                        " && git push")
-                msg)
-        message
-        async-shell-command)))
+                  mabo3n/backup-dotspacemacs-default-commit-message))
+         (command (format (concat "git add ."
+                                  " && git commit -m \"%s\""
+                                  " && git push")
+                          msg)))
+    (mabo3n/backup-files--run-command command)))
 
 (provide 'init-backup)
 ;;; init-backup.el ends here
