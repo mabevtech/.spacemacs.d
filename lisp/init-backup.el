@@ -92,9 +92,10 @@ about rclone's copy command behavior."
                         :initial-input (or (buffer-file-name)
                                            default-directory)))))
         (args (or (and (consp current-prefix-arg)
-                       (cons (read-string "args: ") nil))
+                       (list (read-string "args: ")))
                   args)))
-    (-> (mabo3n/backup-files--build-backup-command file args)
+    (-> (if (listp file) file (list file))
+        (mabo3n/backup-files--build-backup-command args)
         (string-join ";\n")
         message
         async-shell-command)))
