@@ -75,13 +75,21 @@ ARGS is a list of string arguments forwarded to rclone."
 This builds and executes a rclone's copy command for each file in FILES.
 ARGS are passed to each of these commands.
 
+FILES can be a list of files or a single file (path).
+When called interactively, prompts for a single file and use no ARGS.
+With a `\\[universal-argument]', also prompts for single arg string.
+
 Backing up files outside of, or the whole `user-home-directory', is not allowed.
 
 See URL `https://rclone.org/commands/rclone_copy/' for more info."
-  (-> (mabo3n/backup-files--build-backup-command files args)
-      (string-join ";\n")
-      message
-      async-shell-command))
+  (interactive "fBackup file: \nP")
+  (let ((args (or (and (consp current-prefix-arg)
+                       (cons (read-string "args: ") nil))
+                  args)))
+    (-> (mabo3n/backup-files--build-backup-command files args)
+        (string-join ";\n")
+        message
+        async-shell-command)))
 
 (defun mabo3n/backup-recent-files (files &optional args)
   "Upload recent (24h) edited FILES to cloud.
