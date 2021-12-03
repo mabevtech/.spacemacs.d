@@ -9,7 +9,7 @@
 ;; (require 'core-dotspacemacs)
 
 (defconst mabo3n/backup-files-remote-directory "d:env/"
-  "Where `mabo3n/backup-files' moves files to.")
+  "Where `mabo3n/backup-file' moves files to.")
 
 (defun mabo3n/backup-files--get-remote-path (file)
   "Get remote path for FILE."
@@ -69,24 +69,25 @@ ARGS is a list of string arguments forwarded to rclone."
             (funcall fn)))
       command)))
 
-(defun mabo3n/backup-files (files &optional args)
-  "Upload FILES to cloud under `mabo3n/backup-files-remote-directory'.
+(defun mabo3n/backup-file (file &optional args)
+  "Upload FILE to cloud under `mabo3n/backup-files-remote-directory'.
 
-This builds and executes a rclone's copy command for each file in FILES.
-ARGS are passed to each of these commands.
+This builds and executes an rclone's copy command for FILE
+using each arg in ARGS. FILE can be a path or list of paths.
 
-FILES can be a list of files or a single file (path).
-When called interactively, prompts for a single file and use no ARGS.
+When called interactively, prompts for a file and use no ARGS.
 With a `\\[universal-argument]', also prompts for single arg string.
 
-Backing up files outside of, or the whole `user-home-directory', is not allowed.
+Backing up files outside of, or the whole `user-home-directory',
+is not allowed (they are ignored).
 
-See URL `https://rclone.org/commands/rclone_copy/' for more info."
+See URL `https://rclone.org/commands/rclone_copy/' for more info
+about rclone's copy command behavior."
   (interactive "fBackup file: \nP")
   (let ((args (or (and (consp current-prefix-arg)
                        (cons (read-string "args: ") nil))
                   args)))
-    (-> (mabo3n/backup-files--build-backup-command files args)
+    (-> (mabo3n/backup-files--build-backup-command file args)
         (string-join ";\n")
         message
         async-shell-command)))
@@ -94,8 +95,8 @@ See URL `https://rclone.org/commands/rclone_copy/' for more info."
 (defun mabo3n/backup-recent-files (files &optional args)
   "Upload recent (24h) edited FILES to cloud.
 
-Uses `mabo3n/backup-files' with ARGS."
-  (mabo3n/backup-files files (append args '("--max-age 24"))))
+Uses `mabo3n/backup-file' with ARGS."
+  (mabo3n/backup-file files (append args '("--max-age 24"))))
 
 (defun mabo3n/backup-recent-dotfiles (&optional args)
   "Upload recent (24h) edited dotfiles to cloud.
@@ -119,7 +120,7 @@ Uses `mabo3n/backup-recent-files' with ARGS."
 
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
-  (mabo3n/backup-files
+  (mabo3n/backup-file
    `(,(expand-file-name "org/" user-home-directory)) args))
 
 
