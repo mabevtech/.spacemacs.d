@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+;; (require 'org)
 ;; (require 'org-capture)
 ;; (require 'org-agenda)
 ;; (require 'helm-mode)
