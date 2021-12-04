@@ -42,5 +42,24 @@ Workaround to region on visual state mode not working with yasnippets
 (define-key evil-visual-state-map (kbd "C-;") #'mabo3n/helm-yas)
 (define-key evil-hybrid-state-map (kbd "C-;") #'mabo3n/helm-yas)
 
+;;; misc
+
+;; Fix for org src block expansion
+;; https://www.reddit.com/r/emacs/comments/nj08dz/issues_with_yasnippet_in_emacs_272_lisp_error/
+(with-eval-after-load 'init-org
+  (defun mabo3n/org-mode-prepare-for-snippet-expansion ()
+    "Set variable `org-src-tabs-act-natively' to nil."
+    (setq mabo3n/org-src-tab-acts-natively org-src-tab-acts-natively)
+    (setq org-src-tabs-act-natively nil))
+  (defun mabo3n/org-mode-finalize-after-snippet-exit ()
+    "Restore value of variable `org-src-tabs-act-natively'."
+    (setq org-src-tabs-act-natively mabo3n/org-src-tab-acts-natively)
+    (makunbound 'mabo3n/org-src-tab-acts-natively))
+
+  (add-hook 'yas-before-expand-snippet-hook
+            #'mabo3n/org-mode-prepare-for-snippet-expansion)
+  (add-hook 'yas-after-exit-snippet-hook
+            #'mabo3n/org-mode-finalize-after-snippet-exit))
+
 (provide 'init-yas)
 ;;; init-yas.el ends here
