@@ -13,6 +13,8 @@
 (global-set-key (kbd "C-r") #'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") #'isearch-forward)
 (global-set-key (kbd "C-M-r") #'isearch-backward)
+(global-set-key (kbd "M-%") #'query-replace-regexp)
+(global-set-key (kbd "C-M-%") #'query-replace)
 
 (setq garbage-collection-messages t)
 
@@ -58,6 +60,30 @@
 ;; Make query replace not stop when encountering read-only text
 ;; This is useful while replacing on helm-ag-edit buffer
 (setq query-replace-skip-read-only t)
+
+(with-eval-after-load 're-builder
+  (defun mabo3n/reb-copy ()
+    "Copy as `reb-copy' but respect RE string syntax.
+
+This allows pasting the regexp on `query-replace-regexp' completion
+just fine. See URL `https://emacs.stackexchange.com/a/51190'."
+    (interactive)
+    (if (not (eq reb-re-syntax 'string))
+        (reb-copy)
+      (with-current-buffer reb-buffer
+        (reb-update-regexp)
+        (goto-char (point-min))
+        (re-search-forward "\"")
+        (let* ((beg (point))
+               (regexp
+                (progn
+                  (goto-char (point-max))
+                  (re-search-backward "\"")
+                  (buffer-substring-no-properties beg (point)))))
+          (kill-new regexp)
+          (message "Copied regexp `%s' to kill-ring" regexp)))))
+
+  (define-key reb-mode-map (kbd "C-c y") #'mabo3n/reb-copy))
 
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
