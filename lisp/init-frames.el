@@ -46,5 +46,11 @@ If FRAME is omitted or nil, use currently selected frame."
 (mabo3n/recenter-frame)
 (add-hook 'after-make-frame-functions #'mabo3n/resize-frame)
 
+(spacemacs/set-leader-keys
+  "F F" #'make-frame
+  "F <tab>" #'other-frame
+  "F C-c" #'mabo3n/recenter-frame
+  "F C-s" #'mabo3n/resize-frame)
+
 (provide 'init-frames)
 ;;; init-frames.el ends here

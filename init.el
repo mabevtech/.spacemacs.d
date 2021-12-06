@@ -308,10 +308,7 @@ before packages are loaded."
   (spacemacs/set-leader-keys
     "x r b" #'regexp-builder
     "x r h" #'helm-regexp
-    "T B"  #'toggle-scroll-bar
-    "F F" #'make-frame
-    "F <tab>" #'other-frame
-    )
+    "T B"  #'toggle-scroll-bar)
 
   (evil-define-key (list 'insert 'hybrid) markdown-mode-map (kbd "<tab>") #'hippie-expand)
   (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand)
