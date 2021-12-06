@@ -8,7 +8,7 @@
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
-;; Start with frame the size I like
+;; Start with frame size and position I like
 (defconst mabo3n/default-frame-size '(100 . 40)
   "Cons cell with default `(WIDTH . HEIGHT)' for frames.")
 
@@ -29,7 +29,29 @@ When called interactively, prompts for WIDTH and HEIGHT."
     (set-frame-size frame (car size) (cdr size))
     frame))
 
+;; From `https://christiantietze.de/posts/2021/06/emacs-center-window-single-function/'
+(defun mabo3n/recenter-frame (&optional frame)
+  "Center FRAME on the screen.
+
+FRAME can be a frame name, a terminal name, or a frame.
+If FRAME is omitted or nil, use currently selected frame."
+  (interactive)
+  (unless (eq 'maximised (frame-parameter nil 'fullscreen))
+    (let* ((frame (or (and (boundp 'frame)
+                           frame)
+                      (selected-frame)))
+           (frame-w (frame-pixel-width frame))
+           (frame-h (frame-pixel-height frame))
+           ;; frame-monitor-workarea returns (x y width height) for the monitor
+           (monitor-w (nth 2 (frame-monitor-workarea frame)))
+           (monitor-h (nth 3 (frame-monitor-workarea frame)))
+           (center (list (/ (- monitor-w frame-w) 2)
+                         (/ (- monitor-h frame-h) 2))))
+      (apply 'set-frame-position `(,frame ,@center)))))
+
 (mabo3n/resize-frame)
+(mabo3n/recenter-frame)
+(add-hook 'after-make-frame-functions #'mabo3n/resize-frame)
 
 ;; Use regex searches by default
 (global-set-key (kbd "C-s") #'isearch-forward-regexp)
