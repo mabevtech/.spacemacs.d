@@ -87,10 +87,10 @@ ARGS is a list of string arguments forwarded to rclone."
                (goto-char (point-max))
                (let ((inhibit-read-only t))
                  (insert "\n" (substring signal 0 -1) ".")
-                 (help-mode)))))))))
+                 (help-mode))))))))))
 
-  (defun mabo3n/backup-file (file &optional args)
-    "Upload FILE to cloud under `mabo3n/backup-files-remote-directory'.
+(defun mabo3n/backup-file (file &optional args)
+  "Upload FILE to cloud under `mabo3n/backup-files-remote-directory'.
 
 This builds and executes an rclone's copy command for FILE
 using each arg in ARGS. FILE can be a path or list of paths.
@@ -103,21 +103,21 @@ is not allowed (they are ignored).
 
 See URL `https://rclone.org/commands/rclone_copy/' for more info
 about rclone's copy command behavior."
-    (interactive "i\nP")
-    (let* ((file (or file
-                     (and (called-interactively-p 'any)
-                          (helm-read-file-name
-                           "File: "
-                           :initial-input (or (dired-get-filename nil t)
-                                              (buffer-file-name)
-                                              default-directory)))))
-           (args (or (and (consp current-prefix-arg)
-                          (list (read-string "args: ")))
-                     args))
-           (command (-> (if (listp file) file (list file))
-                        (mabo3n/backup-files--build-backup-command args)
-                        (string-join ";\n"))))
-      (mabo3n/backup-files--run-command command))))
+  (interactive "i\nP")
+  (let* ((file (or file
+                   (and (called-interactively-p 'any)
+                        (helm-read-file-name
+                         "File: "
+                         :initial-input (or (dired-get-filename nil t)
+                                            (buffer-file-name)
+                                            default-directory)))))
+         (args (or (and (consp current-prefix-arg)
+                        (list (read-string "args: ")))
+                   args))
+         (command (-> (if (listp file) file (list file))
+                      (mabo3n/backup-files--build-backup-command args)
+                      (string-join ";\n"))))
+    (mabo3n/backup-files--run-command command)))
 
 (defun mabo3n/backup-recent-files (files &optional args)
   "Upload recent (24h) edited FILES to cloud.
