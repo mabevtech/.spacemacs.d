@@ -108,7 +108,8 @@ about rclone's copy command behavior."
                      (and (called-interactively-p 'any)
                           (helm-read-file-name
                            "File: "
-                           :initial-input (or (buffer-file-name)
+                           :initial-input (or (dired-get-filename nil t)
+                                              (buffer-file-name)
                                               default-directory)))))
            (args (or (and (consp current-prefix-arg)
                           (list (read-string "args: ")))
