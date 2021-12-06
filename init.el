@@ -224,6 +224,7 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
   (require 'init-emacs)
+  (require 'init-frames)
   (require 'init-evil)
   (require 'init-org)
   (require 'init-yas)
