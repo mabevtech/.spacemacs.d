@@ -42,15 +42,25 @@ If FRAME is omitted or nil, use currently selected frame."
                          (/ (- monitor-h frame-h) 2))))
       (apply 'set-frame-position `(,frame ,@center)))))
 
-(mabo3n/resize-frame)
-(mabo3n/recenter-frame)
+(defun mabo3n/reset-frame (&optional frame)
+  "Resize and recenter FRAME.
+
+See `mabo3n/resize-frame' and `mabo3n/recenter-frame'."
+  (interactive)
+  (mabo3n/resize-frame)
+  (mabo3n/recenter-frame))
+
+(mabo3n/reset-frame)
 (add-hook 'after-make-frame-functions #'mabo3n/resize-frame)
+
+(spacemacs/declare-prefix "F r" "Re-")
 
 (spacemacs/set-leader-keys
   "F F" #'make-frame
   "F <tab>" #'other-frame
-  "F C-c" #'mabo3n/recenter-frame
-  "F C-s" #'mabo3n/resize-frame)
+  "F r c" #'mabo3n/recenter-frame
+  "F r s" #'mabo3n/resize-frame
+  "F r r" #'mabo3n/reset-frame)
 
 (provide 'init-frames)
 ;;; init-frames.el ends here
