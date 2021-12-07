@@ -9,26 +9,53 @@
 ;; (require 'core-dotspacemacs)
 ;; (require 'helm)
 
-(defconst mabo3n/backup-files-remote-directory "d:env/"
+(defconst mabo3n/backup-files-remote-directory "d:"
   "Where `mabo3n/backup-file' moves files to.")
 
+(defconst mabo3n/backup-files-path-translations
+  `(("^Documents" . "docs")
+    ("^Downloads" . "downs")
+    ("^Pictures"  . "pics")
+    ("^Desktop"   . "desk")
+    ("^\\."       . ,(concat (file-name-as-directory "dot") ".")))
+  "File path translations to be applied before backing up files.
+
+Each entry has form (REGEXP . REPLACEMENT), where REGEXP is the
+remote path sans the initial `mabo3n/backup-files-remote-directory',
+and REPLACEMENT the replacement string to substitute REGEXP.")
+
 (defun mabo3n/backup-files--get-remote-path (file)
-  "Get remote path for FILE."
+  "Get remote destination for local FILE.
+
+Apply each of `mabo3n/backup-files-path-translations' on FILE,
+and return its remote destination, which basically is \"the path
+to the last directory on FILE, relative to `user-home-directory',
+prepended by `mabo3n/backup-files-remote-directory'\".
+
+Note that no sanitization/validation against paths are performed."
   (let ((expanded-file (expand-file-name file)))
     (when (string-prefix-p user-home-directory expanded-file)
-      (let ((dir-p (file-directory-p expanded-file))
-            (file-path-relative-to-user-home
-             (string-trim-left expanded-file
-                               (concat "^" (file-name-as-directory
-                                            user-home-directory)))))
+      (let* ((relative-file-path
+              (string-trim-left expanded-file
+                                (concat "^" (file-name-as-directory
+                                             user-home-directory))))
+             (dirp (file-directory-p expanded-file))
+             (translated-path
+              (reduce (lambda (path translation-entry)
+                        (replace-regexp-in-string (car translation-entry)
+                                                  (cdr translation-entry)
+                                                  path
+                                                  t))
+                      mabo3n/backup-files-path-translations
+                      :initial-value relative-file-path))
+             (translated-path-last-directory
+              (if dirp
+                  ;; **/foo/dir -> **/foo/dir/
+                  (file-name-as-directory translated-path)
+                ;; **/foo/file -> **/foo/
+                (file-name-directory translated-path))))
         (concat mabo3n/backup-files-remote-directory
-                (if dir-p
-                    ;; **/foo/dir -> **/foo/dir/
-                    (file-name-as-directory
-                     file-path-relative-to-user-home)
-                  ;; **/foo/file -> **/foo/
-                  (file-name-directory
-                   file-path-relative-to-user-home)))))))
+                translated-path-last-directory)))))
 
 (defun mabo3n/backup-files--build-backup-command (file &optional args)
   "Generate a shell command to backup FILE.
