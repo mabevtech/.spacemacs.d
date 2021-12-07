@@ -9,28 +9,28 @@
 ;; (require 'core-dotspacemacs)
 ;; (require 'helm)
 
-(defconst mabo3n/backup-files-remote-directory "d:"
+(defconst mabo3n/backup-files-remote-root "d:"
   "Where `mabo3n/backup-file' moves files to.")
 
-(defconst mabo3n/backup-files-path-translations
+(defconst mabo3n/backup-files-path-transformations
   `(("^Documents" . "docs")
     ("^Downloads" . "downs")
     ("^Pictures"  . "pics")
     ("^Desktop"   . "desk")
     ("^\\."       . ,(concat (file-name-as-directory "dot") ".")))
-  "File path translations to be applied before backing up files.
+  "File path transformations to be applied before backing up files.
 
 Each entry has form (REGEXP . REPLACEMENT), where REGEXP is the
-remote path sans the initial `mabo3n/backup-files-remote-directory',
+remote path sans the initial `mabo3n/backup-files-remote-root',
 and REPLACEMENT the replacement string to substitute REGEXP.")
 
 (defun mabo3n/backup-files--get-remote-path (file)
   "Get remote destination for local FILE.
 
-Apply each of `mabo3n/backup-files-path-translations' on FILE,
+Apply each of `mabo3n/backup-files-path-transformations' on FILE,
 and return its remote destination, which basically is \"the path
 to the last directory on FILE, relative to `user-home-directory',
-prepended by `mabo3n/backup-files-remote-directory'\".
+prepended by `mabo3n/backup-files-remote-root'\".
 
 Note that no sanitization/validation against paths are performed."
   (let ((expanded-file (expand-file-name file)))
@@ -40,22 +40,22 @@ Note that no sanitization/validation against paths are performed."
                                 (concat "^" (file-name-as-directory
                                              user-home-directory))))
              (dirp (file-directory-p expanded-file))
-             (translated-path
-              (reduce (lambda (path translation-entry)
-                        (replace-regexp-in-string (car translation-entry)
-                                                  (cdr translation-entry)
+             (transformed-path
+              (reduce (lambda (path transformation-entry)
+                        (replace-regexp-in-string (car transformation-entry)
+                                                  (cdr transformation-entry)
                                                   path
                                                   t))
-                      mabo3n/backup-files-path-translations
+                      mabo3n/backup-files-path-transformations
                       :initial-value relative-file-path))
-             (translated-path-last-directory
+             (transformed-path-last-directory
               (if dirp
                   ;; **/foo/dir -> **/foo/dir/
-                  (file-name-as-directory translated-path)
+                  (file-name-as-directory transformed-path)
                 ;; **/foo/file -> **/foo/
-                (file-name-directory translated-path))))
-        (concat mabo3n/backup-files-remote-directory
-                translated-path-last-directory)))))
+                (file-name-directory transformed-path))))
+        (concat mabo3n/backup-files-remote-root
+                transformed-path-last-directory)))))
 
 (defun mabo3n/backup-files--build-backup-command (file &optional args)
   "Generate a shell command to backup FILE.
@@ -117,10 +117,10 @@ ARGS is a list of string arguments forwarded to rclone."
                  (help-mode))))))))))
 
 (defun mabo3n/backup-file (file &optional args)
-  "Upload FILE to cloud under `mabo3n/backup-files-remote-directory'.
+  "Upload FILE to cloud under `mabo3n/backup-files-remote-root'.
 
-This builds and executes an rclone's copy command for FILE
-using each arg in ARGS. FILE can be a path or list of paths.
+This builds and executes an rclone's copy command for FILE using
+each arg in ARGS. FILE can be a file path or list of file paths.
 
 When called interactively, prompts for a file and use no ARGS.
 With a `\\[universal-argument]', also prompts for single arg string.
