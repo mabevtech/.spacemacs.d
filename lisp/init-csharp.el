@@ -50,6 +50,30 @@
 (add-hook 'csharp-mode-hook
           'mabo3n/prioritize-snippet-expansion-on-completion)
 
+;;; evil text objects
+
+;; (spacemacs|define-text-object-regexp "m" "method" "" "")
+
+(let ((method-header-regexp
+       (concat "^\\(\\(?2:[[:space:]]*\\)[[:alpha:]].*\\)\\(\n"
+               "\\2[[:space:]]*[^[:space:]\n"
+               "].*\\)\\{0,3\\}\\(\n"
+               "[[:space:]]+\\)?\\(?5:{[[:space:]]*$\\|=>\\)")))
+  (evil-define-text-object evil-inner-csharp-method (count &optional beg end type)
+    (save-excursion
+      (re-search-backward method-header-regexp nil t)
+      (when-let ((beg (match-beginning 0))
+                 (end (match-end 0))
+                 (indent-string (match-string-no-properties 2))
+                 (end-string (match-string-no-properties 5)))
+        (list beg
+              (if (string= end-string "=>")
+                  (and (search-forward ";" nil t) (1+ (point-at-eol)))
+                (and (re-search-forward (concat "^" indent-string "}") nil t)
+                     (1+ (point-at-eol)))))
+        )))
+  (define-key evil-inner-text-objects-map "m" 'evil-inner-csharp-method))
+
 ;;; misc
 
 (defun mabo3n/csharp-set-shift-width ()
