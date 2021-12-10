@@ -54,39 +54,65 @@
 
 ;; (spacemacs|define-text-object-regexp "m" "method" "" "")
 
-(let ((method-header-regexp
-       (concat "^\\(\\(?2:[[:space:]]*\\)[[:alpha:]].*\\)\\(\n"
-               "\\2[[:space:]]*[^[:space:]\n"
-               "].*\\)\\{0,3\\}\\(\n"
-               "[[:space:]]+\\)?\\(?5:{[[:space:]]*$\\|=>\\)")))
-  (evil-define-text-object evil-inner-csharp-function (count &optional beg end type)
+(defun mabo3n/csharp--get-function-region
+    (&optional include-around)
+  "TODO: docstring"
+  (let ((function-header-regexp
+         (concat "\\(?1:\\(?:^[[:space:]]*\n\\)\\)"
+                 "\\(?2:\\(?3:[[:space:]]*\\)[[:alpha:]].*[^;\n]\\)"
+                 "\\(?:\n\\3[[:space:]]*[^[:space:]\n].*\\)\\{0,5\\}"
+                 "\\(?:\n[[:space:]]+\\)?"
+                 "\\(?:\\(?4:{\\)[[:space:]]*$\\|\\(?4:=>\\)\\)")))
     (save-excursion
       (let* ((p (point))
              (match-data
-              (and (re-search-backward method-header-regexp nil t)
+              (and (re-search-backward function-header-regexp nil t)
                    (match-data))))
         ;; TODO what if there's no class/namespace and match-data is nil?
 
-        ;; `re-search-backward' only matches pattern ending BEFORE `point.'.
+        ;; `re-search-backward' only matches pattern ending BEFORE `point'.
         ;; If we're under a function header, the PREVIOUS function (or class)
         ;; header will be matched instead. So we try to match the next one
         ;; and, if it starts before previous point, that's the one we want.
-        (unless (and (goto-char (point-at-eol)) ; avoid the same pattern
-                     (re-search-forward method-header-regexp nil t)
+        (unless (and (goto-char (point-at-eol)) ; avoid the same pattern FIXME: need to go after optional empty lines
+                     (re-search-forward function-header-regexp nil t)
                      (<= (match-beginning 0) p))
           (goto-char p)
           (set-match-data match-data))
-        (when-let ((beg (match-beginning 0))
-                   (end (match-end 0))
-                   (indent-string (match-string-no-properties 2))
-                   (end-string (match-string-no-properties 5)))
-          (list beg
-                (if (string= end-string "=>")
-                    (and (search-forward ";" nil t) (1+ (point-at-eol)))
-                  (and (re-search-forward (concat "^" indent-string "}") nil t)
-                       (1+ (point-at-eol)))))
-          ))))
-  (define-key evil-inner-text-objects-map "f" 'evil-inner-csharp-function))
+        (when-let ((beg-empty-lines (match-beginning 1))
+                   (beg-header-line (match-beginning 2))
+                   (end-header (match-end 4))
+                   (indent-string (match-string-no-properties 3))
+                   (open-scope-string (match-string-no-properties 4)))
+          (let* ((lambda-exp-p (string= open-scope-string "=>"))
+                 (end-of-scope-regexp
+                  (if lambda-exp-p
+                      ;; FIXME find last before indent shorter than functions'.
+                      ;; this is matching any statement
+                      "\\(?1:;[[:space:]]*\n\\)\\(?2:[[:space:]]*\n\\)*"
+                    (concat "\\(?1:^"
+                            indent-string
+                            "}[[:space:]]*\n\\)\\(?2:[[:space:]]*\n\\)*")))
+                 (end (and (re-search-forward end-of-scope-regexp nil t)
+                           (if include-around
+                               (match-end 0)
+                             (match-end 1))))
+                 (beg (if (and include-around
+                               ;; Mimicking "word" behavior:
+                               ;; If no empty spaces after object,
+                               ;; include previous ones instead.
+                               (not (match-string 2)))
+                          beg-empty-lines
+                        beg-header-line)))
+            (list beg end)))))))
+
+(evil-define-text-object evil-inner-csharp-function (count &optional beg end type)
+  (mabo3n/csharp--get-function-region nil))
+(define-key evil-inner-text-objects-map "f" 'evil-inner-csharp-function)
+(evil-define-text-object evil-a-csharp-function (count &optional beg end type)
+  (mabo3n/csharp--get-function-region t))
+(define-key evil-outer-text-objects-map "f" 'evil-a-csharp-function)
+
 
 ;;; misc
 
