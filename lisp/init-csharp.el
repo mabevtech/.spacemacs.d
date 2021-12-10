@@ -59,20 +59,34 @@
                "\\2[[:space:]]*[^[:space:]\n"
                "].*\\)\\{0,3\\}\\(\n"
                "[[:space:]]+\\)?\\(?5:{[[:space:]]*$\\|=>\\)")))
-  (evil-define-text-object evil-inner-csharp-method (count &optional beg end type)
+  (evil-define-text-object evil-inner-csharp-function (count &optional beg end type)
     (save-excursion
-      (re-search-backward method-header-regexp nil t)
-      (when-let ((beg (match-beginning 0))
-                 (end (match-end 0))
-                 (indent-string (match-string-no-properties 2))
-                 (end-string (match-string-no-properties 5)))
-        (list beg
-              (if (string= end-string "=>")
-                  (and (search-forward ";" nil t) (1+ (point-at-eol)))
-                (and (re-search-forward (concat "^" indent-string "}") nil t)
-                     (1+ (point-at-eol)))))
-        )))
-  (define-key evil-inner-text-objects-map "m" 'evil-inner-csharp-method))
+      (let* ((p (point))
+             (match-data
+              (and (re-search-backward method-header-regexp nil t)
+                   (match-data))))
+        ;; TODO what if there's no class/namespace and match-data is nil?
+
+        ;; `re-search-backward' only matches pattern ending BEFORE `point.'.
+        ;; If we're under a function header, the PREVIOUS function (or class)
+        ;; header will be matched instead. So we try to match the next one
+        ;; and, if it starts before previous point, that's the one we want.
+        (unless (and (goto-char (point-at-eol)) ; avoid the same pattern
+                     (re-search-forward method-header-regexp nil t)
+                     (<= (match-beginning 0) p))
+          (goto-char p)
+          (set-match-data match-data))
+        (when-let ((beg (match-beginning 0))
+                   (end (match-end 0))
+                   (indent-string (match-string-no-properties 2))
+                   (end-string (match-string-no-properties 5)))
+          (list beg
+                (if (string= end-string "=>")
+                    (and (search-forward ";" nil t) (1+ (point-at-eol)))
+                  (and (re-search-forward (concat "^" indent-string "}") nil t)
+                       (1+ (point-at-eol)))))
+          ))))
+  (define-key evil-inner-text-objects-map "f" 'evil-inner-csharp-function))
 
 ;;; misc
 
