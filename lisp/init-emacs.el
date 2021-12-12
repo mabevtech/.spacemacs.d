@@ -16,6 +16,10 @@
 (global-set-key (kbd "M-%") #'query-replace-regexp)
 (global-set-key (kbd "C-M-%") #'query-replace)
 
+;; I constantly press this by mistake
+(global-set-key (kbd "C-x C-c") nil)
+(global-set-key (kbd "C-x C-c C-c") #'save-buffers-kill-terminal)
+
 (setq garbage-collection-messages t)
 
 (defun mabo3n/enable-auto-reload-dir-locals-vars-on-save ()
