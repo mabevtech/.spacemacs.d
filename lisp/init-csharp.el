@@ -52,59 +52,90 @@
 
 ;;; evil text objects
 
-;; (spacemacs|define-text-object-regexp "m" "method" "" "")
-
 (defun mabo3n/csharp--get-function-region
     (&optional include-around)
   "TODO: docstring"
-  (let ((function-header-regexp
-         (concat "\\(?1:\\(?:^[[:space:]]*\n\\)\\)"
+  (let ((previous-empty-lines-group 1)
+        (function-header-group 2)
+        (function-header-indent-group 3)
+        (function-open-delimiter-group 4)
+        (function-header-regexp
+         (concat "\\(?:\\(?:[^[:space:]\n]\\|\\`\\)[[:space:]]*\n\\)"
+                 "\\(?1:\\(?:[[:space:]]*\n\\)*\\)"
                  "\\(?2:\\(?3:[[:space:]]*\\)[[:alpha:]].*[^;\n]\\)"
                  "\\(?:\n\\3[[:space:]]*[^[:space:]\n].*\\)\\{0,5\\}"
                  "\\(?:\n[[:space:]]+\\)?"
                  "\\(?:\\(?4:{\\)[[:space:]]*$\\|\\(?4:=>\\)\\)")))
-    (save-excursion
-      (let* ((p (point))
-             (match-data
-              (and (re-search-backward function-header-regexp nil t)
-                   (match-data))))
-        ;; TODO what if there's no class/namespace and match-data is nil?
+    (catch 'region
+      (save-excursion
+       (let* ((p (point))
+              (prev-fun-match-data
+               (and (re-search-backward function-header-regexp nil t)
+                    (match-data)))
+              (next-fun-match-data
+               (and (goto-char (or (match-end function-header-group)
+                                   ;; go to beg of empty lines / scope openning to
+                                   ;; match next fun including all whitespaces before it
+                                   (and (re-search-backward "^[[:space:]]*\n" nil t)
+                                        (re-search-backward "[^[:space:]][[:space:]]*\n" nil t)
+                                        (1+ (match-end 0)))
+                                   (and (re-search-backward "[^[:space:]][[:space:]]*\\(?:\n[[:space:]]+\\)?{[[:space:]]*\n" nil t)
+                                        (1+ (match-end 0)))
+                                   (point-at-bol)))
+                    (re-search-forward function-header-regexp nil t)
+                    (match-data))))
 
-        ;; `re-search-backward' only matches pattern ending BEFORE `point'.
-        ;; If we're under a function header, the PREVIOUS function (or class)
-        ;; header will be matched instead. So we try to match the next one
-        ;; and, if it starts before previous point, that's the one we want.
-        (unless (and (goto-char (point-at-eol)) ; avoid the same pattern FIXME: need to go after optional empty lines
-                     (re-search-forward function-header-regexp nil t)
-                     (<= (match-beginning 0) p))
-          (goto-char p)
-          (set-match-data match-data))
-        (when-let ((beg-empty-lines (match-beginning 1))
-                   (beg-header-line (match-beginning 2))
-                   (end-header (match-end 4))
-                   (indent-string (match-string-no-properties 3))
-                   (open-scope-string (match-string-no-properties 4)))
-          (let* ((lambda-exp-p (string= open-scope-string "=>"))
-                 (end-of-scope-regexp
-                  (if lambda-exp-p
-                      ;; FIXME find last before indent shorter than functions'.
-                      ;; this is matching any statement
-                      "\\(?1:;[[:space:]]*\n\\)\\(?2:[[:space:]]*\n\\)*"
-                    (concat "\\(?1:^"
-                            indent-string
-                            "}[[:space:]]*\n\\)\\(?2:[[:space:]]*\n\\)*")))
-                 (end (and (re-search-forward end-of-scope-regexp nil t)
-                           (if include-around
-                               (match-end 0)
-                             (match-end 1))))
-                 (beg (if (and include-around
-                               ;; Mimicking "word" behavior:
-                               ;; If no empty spaces after object,
-                               ;; include previous ones instead.
-                               (not (match-string 2)))
-                          beg-empty-lines
-                        beg-header-line)))
-            (list beg end)))))))
+         (cond
+          ((and next-fun-match-data
+                (>= p (match-beginning function-header-group)))
+           (set-match-data next-fun-match-data))
+          ((and next-fun-match-data
+                (>= p (match-beginning previous-empty-lines-group)))
+           (if include-around
+               (set-match-data next-fun-match-data)
+             (throw 'region `(,(match-beginning previous-empty-lines-group)
+                              ,(match-end       previous-empty-lines-group)))))
+          (prev-fun-match-data
+           (set-match-data prev-fun-match-data))
+          (t
+           (throw 'region '())))
+
+         (when-let ((beg-empty-lines (match-beginning 1))
+                    (beg-header-line (match-beginning 2))
+                    (end-header (match-end 4))
+                    (indent-string (match-string-no-properties 3))
+                    (open-scope-string (match-string-no-properties 4)))
+           ;; This assumes there's no other declarations between functions
+           (goto-char end-header)
+           (let* ((next-empty-lines-group 7)
+                  (lambda-exp-p (string= open-scope-string "=>"))
+                  (end-of-scope-regexp
+                   (if lambda-exp-p
+                       ;; FIXME find last before indent shorter than functions'.
+                       ;; this is matching any statement
+                       "\\(?1:;[[:space:]]*\n\\)\\(?7:\\(?:[[:space:]]*\n\\)*\\)"
+                     (concat "\\(?1:^"
+                             indent-string
+                             "}[[:space:]]*\n\\)\\(?7:\\(?:[[:space:]]*\n\\)*\\)"))))
+
+             (when (re-search-forward end-of-scope-regexp nil t)
+               (if (>= p (match-beginning next-empty-lines-group))
+                   (throw 'region `(,(match-beginning next-empty-lines-group)
+                                    ,(match-end       next-empty-lines-group)))
+                 (if (>= p beg-header-line)
+                     (throw 'region
+                         `(,(if (and include-around
+                                     (not (> (length (match-string
+                                                      next-empty-lines-group))
+                                             0)))
+                                beg-empty-lines
+                              beg-header-line)
+                           ,(if include-around
+                                (match-end 0)
+                              (match-end 1))))
+                   (throw 'region `(,beg-empty-lines ,(match-end 1))))
+                 ))))
+         )))))
 
 (evil-define-text-object evil-inner-csharp-function (count &optional beg end type)
   (mabo3n/csharp--get-function-region nil))
