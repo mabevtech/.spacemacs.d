@@ -3,6 +3,7 @@
 ;;; Code:
 
 ;; (require 'exec-path-from-shell)
+;; (require 'edebug)
 
 ;; Make sure that emacs will have $PATH variables from default shell
 (when (memq window-system '(mac ns))
@@ -21,6 +22,8 @@
 (global-set-key (kbd "C-x C-c C-c") #'save-buffers-kill-terminal)
 
 (setq garbage-collection-messages t)
+
+(setq edebug-print-length nil)
 
 (defun mabo3n/enable-auto-reload-dir-locals-vars-on-save ()
   "From: https://emacs.stackexchange.com/a/13096."
