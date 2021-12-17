@@ -33,5 +33,8 @@ Forward BEG, END and ARGS to `evil-yank'"
 ;; (evil-make-overriding-map Info-mode-map nil)
 ;; (add-hook 'Info-mode-hook #'evil-normalize-keymaps)
 
+(defun mabo3n/goto-last-edit () (interactive) (evil-goto-mark ?. t))
+(define-key evil-normal-state-map (kbd "U") #'mabo3n/goto-last-edit)
+
 (provide 'init-evil)
 ;;; init-evil.el ends here
