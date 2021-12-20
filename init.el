@@ -124,7 +124,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-scratch-buffer-unkillable nil
    dotspacemacs-initial-scratch-message nil
    dotspacemacs-themes '(doom-nord-light doom-moonlight)
-   dotspacemacs-mode-line-theme '(spacemacs
+   dotspacemacs-mode-line-theme '(vanilla
                                   :separator arrow)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Meslo LG S DZ for Powerline"
