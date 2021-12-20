@@ -245,6 +245,8 @@ before packages are loaded."
   (which-key-define-key-recursively global-map [escape] #'ignore)
   (which-key-define-key-recursively evil-emacs-state-map [escape] #'ignore)
 
+  (spacemacs/set-leader-keys "f ESC" #'ignore)
+
   ;; No fringes ~ on empty lines
   (spacemacs/toggle-vi-tilde-fringe-off)
 
