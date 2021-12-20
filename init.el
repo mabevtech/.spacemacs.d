@@ -233,6 +233,18 @@ before packages are loaded."
   (require 'init-python)
   (require 'init-csharp)
 
+  ;; esc always quits
+  ;; https://superuser.com/a/945245
+  (define-key minibuffer-local-map [escape] #'keyboard-escape-quit)
+  (define-key minibuffer-local-ns-map [escape] #'keyboard-escape-quit)
+  (define-key minibuffer-local-completion-map [escape] #'keyboard-escape-quit)
+  (define-key minibuffer-local-must-match-map [escape] #'keyboard-escape-quit)
+  (define-key minibuffer-local-isearch-map [escape] #'keyboard-escape-quit)
+  (global-set-key [escape] 'keyboard-escape-quit)
+  ;; https://github.com/syl20bnr/spacemacs/issues/11989#issuecomment-502131534
+  (which-key-define-key-recursively global-map [escape] #'ignore)
+  (which-key-define-key-recursively evil-emacs-state-map [escape] #'ignore)
+
   ;; No fringes ~ on empty lines
   (spacemacs/toggle-vi-tilde-fringe-off)
 
