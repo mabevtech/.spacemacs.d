@@ -36,8 +36,8 @@ This function should only modify configuration layer settings."
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'complete
                       ;; auto-completion-complete-with-key-sequence '"jk"
-                      auto-completion-complete-with-key-sequence-delay 0.2
-                      auto-completion-idle-delay 0.2
+                      ;; auto-completion-complete-with-key-sequence-delay 0.2
+                      auto-completion-idle-delay nil
                       auto-completion-private-snippets-directory nil
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip t
