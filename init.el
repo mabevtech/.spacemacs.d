@@ -124,8 +124,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-scratch-buffer-unkillable nil
    dotspacemacs-initial-scratch-message nil
    dotspacemacs-themes '(doom-nord-light doom-moonlight)
-   dotspacemacs-mode-line-theme '(vanilla
-                                  :separator arrow)
+   dotspacemacs-mode-line-theme 'doom
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Meslo LG S DZ for Powerline"
                                :size 15
@@ -246,6 +245,10 @@ before packages are loaded."
   (which-key-define-key-recursively evil-emacs-state-map [escape] #'ignore)
 
   (spacemacs/set-leader-keys "f ESC" #'ignore)
+
+  ;; Improve modeline performance
+  ;; https://github.com/seagle0128/doom-modeline/issues/37#issuecomment-435311367
+  (setq inhibit-compacting-font-caches t)
 
   ;; No fringes ~ on empty lines
   (spacemacs/toggle-vi-tilde-fringe-off)
