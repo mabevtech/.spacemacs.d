@@ -54,6 +54,21 @@
 
 (mabo3n/enable-auto-reload-dir-locals-vars-on-save)
 
+;; Always allow marking a dir-local variable permanently as safe.
+;; https://emacs.stackexchange.com/a/10989
+(defun mabo3n/risky-local-variable-p (sym &optional _ignored)
+  "Non-nil if SYM could be dangerous as a file-local variable.
+
+It is dangerous IFF its `risky-local-variable'property is non-nil.
+This is the same as `risky-local-variable-p' but without the 2nd condition."
+  (condition-case nil
+      (setq sym (indirect-variable sym))
+    (error nil))
+  (get sym 'risky-local-variable))
+
+(advice-add 'risky-local-variable-p :override
+            #'mabo3n/risky-local-variable-p)
+
 ;; Use hash of file name for auto save files
 (defun my-shorten-auto-save-file-name (&rest args)
   "Override variable `buffer-file-name' with its SHA1."
