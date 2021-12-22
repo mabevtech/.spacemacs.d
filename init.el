@@ -88,6 +88,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages
    '(exec-path-from-shell
      kaolin-themes
+     rainbow-mode
      ;; company-tabnine
      ag
      add-node-modules-path
