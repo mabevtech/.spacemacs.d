@@ -6,46 +6,6 @@
 ;; (require 'evil-cleverparens-text-objects)
 ;; ;; (require 'hybrid-mode)
 
-;; Use a box cursor on insert/hybrid modes instead of bar one
-(setq-default evil-insert-state-cursor
-              (list (car evil-insert-state-cursor) 'box)
-              evil-hybrid-state-cursor
-              (list (car evil-hybrid-state-cursor) 'box))
-
-;; TODO: customize evil cursor colors and modeline evil faces
-;; https://stackoverflow.com/a/31747535
-(macrolet
-    ((doom-color (evil-state)
-                 (let ((face (intern (concat "doom-modeline-evil-"
-                                             (symbol-name evil-state)))))
-                   (face-attribute face :foreground nil t))))
-  (setq-default
-   evil-normal-state-cursor       '((doom-color normal-state) box)
-   evil-evilified-state-cursor    '("MediumPurple4" box)
-   evil-visual-state-cursor       '("LightGoldenrod3" (hbar . 2))
-
-   evil-hybrid-state-cursor       '("DodgerBlue"    box)
-   evil-emacs-state-cursor        '("DodgerBlue2"   box)
-   evil-insert-state-cursor       '("SteelBlue1"    box)
-
-   evil-replace-state-cursor      '("chocolate"     (hbar . 2))
-   evil-lisp-state-cursor         '("HotPink2"      box)
-
-   evil-iedit-state-cursor        '("IndianRed2"    box)
-   evil-iedit-insert-state-cursor '("IndianRed2"   (bar . 2))
-   evil-operator-state-cursor     '(evil-half-cursor)))
-
-;; doom-modeline-evil-insert-state
-
-;; doom-modeline-evil-visual-state
-;; doom-modeline-evil-normal-state
-;; doom-modeline-evil-motion-state
-
-;; doom-modeline-evil-replace-state
-
-;; doom-modeline-evil-operator-state
-
-
 (defun mabo3n/evil-yank-visual-state (beg end &rest args)
   "Yank then restore point (i.e. <y> <gv> <escape>).
 

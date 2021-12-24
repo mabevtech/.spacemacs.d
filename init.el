@@ -225,6 +225,7 @@ before packages are loaded."
   (require 'init-emacs)
   (require 'init-frames)
   (require 'init-evil)
+  (require 'init-visuals)
   (require 'init-org)
   (require 'init-yas)
   (require 'init-backup)
