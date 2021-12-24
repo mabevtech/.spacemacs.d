@@ -105,7 +105,8 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
           (kill-new regexp)
           (message "Copied regexp `%s' to kill-ring" regexp)))))
 
-  (define-key reb-mode-map (kbd "C-c y") #'mabo3n/reb-copy))
+  (define-key reb-mode-map (kbd "C-c y") #'mabo3n/reb-copy)
+  (define-key reb-mode-map (kbd "C-c C-k") 'reb-quit))
 
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
