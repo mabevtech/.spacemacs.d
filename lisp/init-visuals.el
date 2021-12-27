@@ -20,11 +20,11 @@
    evil-normal-state-cursor       `(,(dooms 'normal-state) box)
    evil-evilified-state-cursor    '("LightGoldenrod2"      box)
    evil-motion-state-cursor       '("MediumPurple1"        box)
-   evil-visual-state-cursor       '(,(dooms 'visual-state) box)
+   evil-visual-state-cursor       `(,(dooms 'visual-state) box)
 
    evil-hybrid-state-cursor       '("SteelBlue3"           box)
    evil-emacs-state-cursor        '("DodgerBlue2"          box)
-   evil-insert-state-cursor       '(,(dooms 'insert-state) box)
+   evil-insert-state-cursor       `(,(dooms 'insert-state) box)
 
    evil-replace-state-cursor      '("IndianRed2"           (hbar . 2))
    evil-lisp-state-cursor         '("HotPink2"             box)
