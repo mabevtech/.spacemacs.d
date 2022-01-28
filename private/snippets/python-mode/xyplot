@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: two function plot example
+# key: xyplot
+# expand-env : ((yas-triggers-in-field nil))
+# --
+import matplotlib.pyplot as plt
+import numpy as np
+
+x = ${3:np.${4:log}space(${5:1}, ${6:6}, ${7:$6}${8:, base=${9:2}})}
+
+y1 = ${1:x * x}
+y2 = ${2:x * np.log2(x)}
+
+plt.plot(x, y1, '.-', label='${1:$(replace-regexp-in-string "np\\." "" yas-text)}')
+plt.plot(x, y2, '.-', label='${2:$(replace-regexp-in-string "np\\." "" yas-text)}')
+
+plt.xlabel('x (input)')
+plt.legend(loc='best')
+plt.show()
+$0

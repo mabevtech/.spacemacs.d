@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: set plot axes' scale
+# key: pltscale
+# --
+plt.${1:x}scale('${2:log}'${3:, base=${4:2}})
+$0

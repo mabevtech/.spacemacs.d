@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: disable scientific notation on plots
+# key: pltnosci
+# key: nosci
+# --
+plt.ticklabel_format(style='plain'${2:, axis='${1:both}'})
+$0
