@@ -2,5 +2,7 @@
 # contributor: mabo3n
 # name: import pandas as pd
 # key: importpd
+# key: pd
 # --
 import pandas as pd
+$0
