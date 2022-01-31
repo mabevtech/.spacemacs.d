@@ -87,6 +87,9 @@ This is the same as `risky-local-variable-p' but without the 2nd condition."
   (defun mabo3n/reb-copy ()
     "Copy as `reb-copy' but respect RE string syntax.
 
+If current `reb-re-syntax' is `\'string', copy regexp exactly as is.
+Otherwise, fallback to `reb-copy'.
+
 This allows pasting the regexp on `query-replace-regexp' completion
 just fine. See URL `https://emacs.stackexchange.com/a/51190'."
     (interactive)
