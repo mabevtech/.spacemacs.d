@@ -86,5 +86,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 (add-hook 'org-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
+(setq-default org-cycle-separator-lines 1)
+
 (provide 'init-org)
 ;;; init-org.el ends here
