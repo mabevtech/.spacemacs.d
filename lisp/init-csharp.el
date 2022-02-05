@@ -55,15 +55,8 @@
 (add-to-list 'load-path (expand-file-name "~/repos/csharpto"))
 (require 'csharpto)
 
-(defun mabo3n/define-csharpto-text-objects ()
-  "Define buffer-local bindings for csharp text objects."
-  (define-key evil-visual-state-local-map   "if" #'evil-inner-csharpto-function)
-  (define-key evil-visual-state-local-map   "af" #'evil-a-csharpto-function)
-  (define-key evil-operator-state-local-map "if" #'evil-inner-csharpto-function)
-  (define-key evil-operator-state-local-map "af" #'evil-a-csharpto-function))
-
-(add-hook 'csharp-mode-hook
-          #'mabo3n/define-csharpto-text-objects)
+(defalias #'mabo3n/evil-inner-csharp-function #'evil-inner-csharpto-function)
+(defalias #'mabo3n/evil-a-csharp-function     #'evil-a-csharpto-function)
 
 ;;; misc
 

@@ -49,6 +49,11 @@
 (evil-define-key (list 'insert 'hybrid) python-mode-map
   (kbd "<tab>") #'hippie-expand)
 
+;;; function text objects
+
+(defalias #'mabo3n/evil-inner-python-function #'evil-indent-plus-i-indent-up)
+(defalias #'mabo3n/evil-a-python-function     #'evil-indent-plus-a-indent-up)
+
 ;; misc
 
 (defun mabo3n/python-set-shift-width ()
