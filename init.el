@@ -274,9 +274,9 @@ before packages are loaded."
   (setq-default sp-escape-quotes-after-insert nil)
 
   ;; Quit evil-numbers-transient-state with Escape
-  ;; (with-eval-after-load evil-numbers
-  ;;   (define-key spacemacs/evil-numbers-transient-state/keymap
-  ;;     (kbd "<escape>") (cdr (assq ?q spacemacs/evil-numbers-transient-state/keymap))))
+  (with-eval-after-load 'evil-numbers
+    (define-key spacemacs/evil-numbers-transient-state/keymap
+      (kbd "<escape>") (cdr (assq ?q spacemacs/evil-numbers-transient-state/keymap))))
 
   (setq company-tooltip-maximum-width 100)
 
