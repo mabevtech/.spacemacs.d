@@ -39,22 +39,22 @@ inside the `org-capture' buffer with `org-capture-refile')."
         (headline (or (and prompt-defaults mabo3n/default-tasks-headline)
                       mabo3n/tasks-headline)))
     (set-buffer buffer)
-	  (unless (derived-mode-p 'org-mode)
-	    (org-display-warning
-	     (format "Capture requirement: switching buffer %S to Org mode"
-		           (current-buffer)))
-	    (org-mode))
-	  (org-capture-put-target-region-and-position)
-	  (widen)
-	  (goto-char (point-min))
+    (unless (derived-mode-p 'org-mode)
+      (org-display-warning
+       (format "Capture requirement: switching buffer %S to Org mode"
+               (current-buffer)))
+      (org-mode))
+    (org-capture-put-target-region-and-position)
+    (widen)
+    (goto-char (point-min))
     (if (re-search-forward (format org-complex-heading-regexp-format
-					                         (regexp-quote headline))
-				                   nil t)
-	      (beginning-of-line)
-	    (goto-char (point-max))
-	    (unless (bolp) (insert "\n"))
-	    (insert "* " headline "\n")
-	    (beginning-of-line 0))))
+                                   (regexp-quote headline))
+                           nil t)
+        (beginning-of-line)
+      (goto-char (point-max))
+      (unless (bolp) (insert "\n"))
+      (insert "* " headline "\n")
+      (beginning-of-line 0))))
 
 (setq org-capture-templates
       '(("t" "Task" entry
