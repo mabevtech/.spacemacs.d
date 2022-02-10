@@ -6,6 +6,8 @@
 ;; (require 'evil-cleverparens-text-objects)
 ;; ;; (require 'hybrid-mode)
 
+(define-key minibuffer-local-map (kbd "C-<escape>") #'evil-normal-state)
+
 (defun mabo3n/evil-yank-visual-state (beg end &rest args)
   "Yank then restore point (i.e. <y> <gv> <escape>).
 
