@@ -51,8 +51,13 @@
 
 ;;; function text objects
 
-(defalias #'mabo3n/evil-inner-python-function #'evil-indent-plus-i-indent-up)
-(defalias #'mabo3n/evil-a-python-function     #'evil-indent-plus-a-indent-up)
+(evil-define-text-object
+  mabo3n/evil-inner-python-function (&optional count beg end type)
+  (evil-indent-plus-i-indent-up count beg end type))
+
+(evil-define-text-object
+  mabo3n/evil-a-python-function (&optional count beg end type)
+  (evil-indent-plus-a-indent-up count beg end type))
 
 ;; misc
 

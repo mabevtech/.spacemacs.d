@@ -55,8 +55,13 @@
 (add-to-list 'load-path (expand-file-name "~/repos/csharpto"))
 (require 'csharpto)
 
-(defalias #'mabo3n/evil-inner-csharp-function #'evil-inner-csharpto-function)
-(defalias #'mabo3n/evil-a-csharp-function     #'evil-a-csharpto-function)
+(evil-define-text-object
+  mabo3n/evil-inner-csharp-function (&optional count beg end type)
+  (csharpto-inner-function count beg end type))
+
+(evil-define-text-object
+  mabo3n/evil-a-csharp-function (&optional count beg end type)
+  (csharpto-a-function count beg end type))
 
 ;;; misc
 
