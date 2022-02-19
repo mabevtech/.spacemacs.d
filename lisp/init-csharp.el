@@ -55,13 +55,7 @@
 (add-to-list 'load-path (expand-file-name "~/repos/csharpto"))
 (require 'csharpto)
 
-(evil-define-text-object
-  mabo3n/evil-inner-csharp-function (&optional count beg end type)
-  (csharpto-inner-function count beg end type))
-
-(evil-define-text-object
-  mabo3n/evil-a-csharp-function (&optional count beg end type)
-  (csharpto-a-function count beg end type))
+(csharpto-use-default-bindings-in-csharp-mode)
 
 ;;; misc
 
