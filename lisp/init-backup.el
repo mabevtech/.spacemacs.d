@@ -177,7 +177,6 @@ Uses `mabo3n/backup-recent-files' with ARGS."
   (mabo3n/backup-file
    `(,(expand-file-name "org/" user-home-directory)) args))
 
-
 (defconst mabo3n/backup-dotspacemacs-default-commit-message
   "<auto commit>"
   "Default commit message used by `mabo3n/backup-dotspacemacs-changes'.")
