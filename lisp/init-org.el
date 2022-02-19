@@ -69,8 +69,12 @@ inside the `org-capture' buffer with `org-capture-refile')."
          (file+olp+datetree "journal.org")
          "* %U\n  %?" :empty-lines 1)
 
-        ("n" "Note" entry (file "")  ;; "" => `org-default-notes-file'
+        ("n" "Note" entry
+         (file "")  ;; "" => `org-default-notes-file'
          "* %? :NOTE:\n  %U" :clock-resume t)
+
+        ("c" "Company" entry (file+headline "~/docs/ip.org" "Companies")
+         "* %^{Name}\n  %^{Source}p%U%?")
         ))
 
 ;; Open org capture buffer in insert state (Adding to end of list
