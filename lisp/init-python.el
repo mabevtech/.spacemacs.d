@@ -52,12 +52,15 @@
 ;;; function text objects
 
 (evil-define-text-object
-  mabo3n/evil-inner-python-function (&optional count beg end type)
+  mabo3n/evil-a-python-function (&optional count beg end type)
   (evil-indent-plus-i-indent-up count beg end type))
 
 (evil-define-text-object
-  mabo3n/evil-a-python-function (&optional count beg end type)
+  mabo3n/evil-a-python-FUNCTION (&optional count beg end type)
   (evil-indent-plus-a-indent-up count beg end type))
+
+(add-hook 'python-mode-hook
+          'mabo3n/bind-function-text-objects-for-current-language)
 
 ;; misc
 
