@@ -199,5 +199,11 @@ Optional COMMIT-MSG can be provided, using
                           msg)))
     (mabo3n/backup-files--run-command command)))
 
+(spacemacs/set-leader-keys
+  "o b f" #'mabo3n/backup-file
+  "o b o" #'mabo3n/backup-org-files
+  "o b d" #'mabo3n/backup-recent-dotfiles
+  "o b C-c" #'mabo3n/backup-dotspacemacs-files)
+
 (provide 'init-backup)
 ;;; init-backup.el ends here
