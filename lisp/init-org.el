@@ -92,5 +92,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 (setq-default org-cycle-separator-lines 1)
 
+(setq-default org-archive-location "archive_%s::")
+
 (provide 'init-org)
 ;;; init-org.el ends here
