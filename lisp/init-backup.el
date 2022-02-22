@@ -199,6 +199,8 @@ Optional COMMIT-MSG can be provided, using
                           msg)))
     (mabo3n/backup-files--run-command command)))
 
+(spacemacs/declare-prefix "o b" "mabo3n/backup")
+
 (spacemacs/set-leader-keys
   "o b f" #'mabo3n/backup-file
   "o b o" #'mabo3n/backup-org-files
