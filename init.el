@@ -19,7 +19,8 @@ This function should only modify configuration layer settings."
           org-enable-github-support t)
      (shell :variables
             shell-default-height 30
-            shell-default-position 'bottom)
+            shell-default-position 'bottom
+            shell-default-shell 'eshell)
      (docker :variables
              docker-dockerfile-backend 'lsp)
      yaml
