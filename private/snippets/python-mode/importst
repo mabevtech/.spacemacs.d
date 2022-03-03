@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
 # contributor: mabo3n
 # name: import scipy.stats as st
-# key: importst
 # key: st
 # --
 import scipy.stats as st

@@ -1,7 +1,6 @@
 # -*- mode: snippet -*-
 # contributor: mabo3n
 # name: foreach (var item in iterable) { ... }
-# key: fore
 # key: foreach
 # --
 foreach (var ${1:item} in ${2:iterable})
