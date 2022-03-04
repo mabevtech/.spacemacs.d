@@ -33,5 +33,7 @@
    evil-iedit-insert-state-cursor '("IndianRed2"           (bar . 2)))
   )
 
+(setq-default doom-modeline-buffer-file-name-style 'truncate-with-project)
+
 (provide 'init-visuals)
 ;;; init-visuals.el ends here
