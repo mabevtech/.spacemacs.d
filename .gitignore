@@ -1,2 +1,3 @@
 .spacemacs.env
 .DS_STORE
+.yas-compiled-snippets.el
