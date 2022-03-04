@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: mimic df.hist but for discrete variables
+# key: freqbar
+# --
+nrows, ncols = (len(${1:df}.columns) // $2) + 1, ${2:ncols}
+plt.subplots(nrows, ncols)
+for i, column in enumerate($1.columns):
+    plt.subplot(nrows, ncols, i + 1)
+    $1[column].value_counts().sort_index().plot.bar()
+    plt.title(column)
+$0
