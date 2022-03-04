@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: Read list of arguments
+# key: readargs
+# --
+var ${3:nums} = args${1:.Select(${2:Int32.Parse})}.ToList();$0

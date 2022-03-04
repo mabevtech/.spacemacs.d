@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: Read standard input line by line
+# key: readstdin
+# --
+string line;
+while ((line = Console.ReadLine()) != null)
+{
+    ${1:Console.WriteLine(\$"Read: \{line\}");}$0
+}
