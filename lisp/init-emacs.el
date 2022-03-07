@@ -115,5 +115,14 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
   (define-key term-raw-map (kbd "M-p") (kbd "C-p"))
   (define-key term-raw-map (kbd "M-n") (kbd "C-n")))
 
+(defun mabo3n/process-menu-delete-process ()
+  "`process-menu-delete-process' with prompt confirmation."
+  (interactive)
+  (when (yes-or-no-p "Kill and forget this process")
+    (call-interactively #'process-menu-delete-process)))
+
+(define-key process-menu-mode-map (kbd "x") 'mabo3n/delete-process-at-point)
+(define-key process-menu-mode-map (kbd "d") 'mabo3n/delete-process-at-point)
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
