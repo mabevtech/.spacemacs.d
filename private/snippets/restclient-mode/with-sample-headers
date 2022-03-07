@@ -1,0 +1,14 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: Surround request with sample headers (user-agent, accept-...)
+# key: with-sample-headers
+# --
+:sample-headers = <<
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36
+accept: */*
+accept-language: en-US,en;q=0.9,pt;q=0.8
+accept-encoding: br, gzip, deflate
+# ------------------
+
+$0
+:sample-headers
