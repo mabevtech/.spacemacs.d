@@ -121,8 +121,8 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
   (when (yes-or-no-p "Kill and forget this process")
     (call-interactively #'process-menu-delete-process)))
 
-(define-key process-menu-mode-map (kbd "x") 'mabo3n/delete-process-at-point)
-(define-key process-menu-mode-map (kbd "d") 'mabo3n/delete-process-at-point)
+(define-key process-menu-mode-map (kbd "x") 'mabo3n/process-menu-delete-process)
+(define-key process-menu-mode-map (kbd "d") 'mabo3n/process-menu-delete-process)
 
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
