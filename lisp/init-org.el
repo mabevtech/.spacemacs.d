@@ -91,6 +91,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (add-hook 'org-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
 (setq-default org-cycle-separator-lines 1)
+(setq-default org-adapt-indentation t)
 
 (setq-default org-archive-location ".archive.%s::")
 (setq-default org-archive-file-header-format "Archived entries from file =%s=:\n\n")
