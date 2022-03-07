@@ -74,7 +74,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
          "* %? :NOTE:\n  %U" :clock-resume t)
 
         ("c" "Company" entry (file+headline "~/docs/ip.org" "Companies")
-         "* %^{Name}\n  %^{Source}p%U%?")
+         "* %^{Name}%?")
         ))
 
 ;; Open org capture buffer in insert state (Adding to end of list
