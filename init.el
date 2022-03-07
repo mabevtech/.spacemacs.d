@@ -290,6 +290,7 @@ before packages are loaded."
   (define-key evil-hybrid-state-map (kbd "C-SPC") #'company-manual-begin)
 
   ;; Treemacs
+
   (with-eval-after-load 'treemacs
     ;; Make navigation more like vim's
     (evil-define-key 'treemacs treemacs-mode-map
@@ -307,12 +308,21 @@ before packages are loaded."
       ;; <x> to delete
       (kbd "x") #'treemacs-delete)
 
-    (spacemacs/set-leader-keys
-      "p t" nil
-      "p T" nil)
-    (spacemacs/set-leader-keys
-      "p t" #'projectile-test-project
-      "p T" #'spacemacs/treemacs-project-toggle))
+    ;; Make SPC p T open project tree (instead of SPC p t)
+    (let ((fun 'spacemacs/treemacs-project-toggle))
+      (spacemacs/set-leader-keys "p T" fun)
+      (when-let ((cell (alist-get
+                        '("\\`SPC p T\\'")
+                        which-key-replacement-alist nil nil #'equal)))
+        (setcdr cell (symbol-name fun)))))
+
+  ;; SPC p t to test project
+  (let ((fun 'projectile-test-project))
+    (spacemacs/set-leader-keys "p t" fun)
+    (when-let ((cell (alist-get
+                      '("\\`SPC p t\\'")
+                      which-key-replacement-alist nil nil #'equal)))
+      (setcdr cell (symbol-name fun))))
 
   (evil-define-key (list 'insert 'hybrid 'normal) restclient-mode-map
     (kbd "<C-return>") 'restclient-http-send-current-stay-in-window)
