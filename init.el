@@ -305,7 +305,14 @@ before packages are loaded."
       ;; <r> to rename (<g r> to refresh)
       (kbd "r") #'treemacs-rename
       ;; <x> to delete
-      (kbd "x") #'treemacs-delete))
+      (kbd "x") #'treemacs-delete)
+
+    (spacemacs/set-leader-keys
+      "p t" nil
+      "p T" nil)
+    (spacemacs/set-leader-keys
+      "p t" #'projectile-test-project
+      "p T" #'spacemacs/treemacs-project-toggle))
 
   (evil-define-key (list 'insert 'hybrid 'normal) restclient-mode-map
     (kbd "<C-return>") 'restclient-http-send-current-stay-in-window)
