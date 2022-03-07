@@ -111,5 +111,9 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
   (define-key reb-mode-map (kbd "C-c y") #'mabo3n/reb-copy)
   (define-key reb-mode-map (kbd "C-c C-k") 'reb-quit))
 
+(with-eval-after-load 'term
+  (define-key term-raw-map (kbd "M-p") (kbd "C-p"))
+  (define-key term-raw-map (kbd "M-n") (kbd "C-n")))
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
