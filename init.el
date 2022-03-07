@@ -246,7 +246,8 @@ before packages are loaded."
   (which-key-define-key-recursively global-map [escape] #'ignore)
   (which-key-define-key-recursively evil-emacs-state-map [escape] #'ignore)
 
-  (spacemacs/set-leader-keys "f ESC" #'ignore)
+  ;; Treemacs layer uses this prefix key.
+  ;; (spacemacs/set-leader-keys "f ESC" #'ignore)
 
   ;; Improve modeline performance
   ;; https://github.com/seagle0128/doom-modeline/issues/37#issuecomment-435311367
