@@ -222,17 +222,22 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  (require 'init-emacs)
-  (require 'init-frames)
-  (require 'init-evil)
-  (require 'init-visuals)
-  (require 'init-org)
-  (require 'init-yas)
-  (require 'init-backup)
-  (require 'init-google)
-  (require 'init-elisp)
-  (require 'init-python)
-  (require 'init-csharp)
+  (let ((features
+         '(init-emacs
+           init-frames
+           init-evil
+           init-visuals
+           init-org
+           init-yas
+           init-backup
+           init-google
+           init-elisp
+           init-python
+           init-csharp)))
+    (dolist (feature features)
+      (when (featurep feature)
+        (unload-feature feature t))
+      (require feature)))
 
   ;; esc always quits
   ;; https://superuser.com/a/945245
