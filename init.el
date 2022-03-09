@@ -207,7 +207,10 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (add-to-list 'load-path (expand-file-name ".spacemacs.d/lisp/")))
+  (add-to-list 'load-path (expand-file-name ".spacemacs.d/lisp/"))
+  ;; Supress forge warning when opening magit buffer for the 1st time
+  ;; https://github.com/magit/forge/issues/388
+  (setq forge-add-default-bindings nil))
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
