@@ -339,6 +339,12 @@ before packages are loaded."
     "x r h" #'helm-regexp
     "T B"  #'toggle-scroll-bar)
 
+  ;; SPC C-q for quit menu
+  (spacemacs/declare-prefix "C-q" "Quit")
+  (spacemacs/set-leader-keys
+    "C-q" (key-binding (kbd "SPC q"))
+    "q" nil)
+
   (evil-define-key (list 'insert 'hybrid) markdown-mode-map (kbd "<tab>") #'hippie-expand)
   (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand)
 
