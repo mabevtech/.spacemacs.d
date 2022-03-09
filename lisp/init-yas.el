@@ -4,7 +4,6 @@
 
 ;; (require 'yasnippet)
 ;; (require 'evil)
-;; (require 'cl)
 ;; (require 'helm)
 ;; (require 'subr-x)
 ;; ;; (require 'hybrid-mode)
@@ -61,18 +60,6 @@ Workaround to region on visual state mode not working with yasnippets
             #'mabo3n/org-mode-prepare-for-snippet-expansion)
   (add-hook 'yas-after-exit-snippet-hook
             #'mabo3n/org-mode-finalize-after-snippet-exit))
-
-;; Custom function to enable reusing some snippet in another
-;; From the package author: https://stackoverflow.com/a/10366711
-(defun yas/insert-by-name (name)
-  (flet ((dummy-prompt
-          (prompt choices &optional display-fn)
-          (declare (ignore prompt))
-          (or (find name choices :key display-fn :test #'string=)
-              (throw 'notfound nil))))
-    (let ((yas/prompt-functions '(dummy-prompt)))
-      (catch 'notfound
-        (yas/insert-snippet t)))))
 
 (provide 'init-yas)
 ;;; init-yas.el ends here
