@@ -340,10 +340,10 @@ before packages are loaded."
     "T B"  #'toggle-scroll-bar)
 
   ;; SPC C-q for quit menu
-  (spacemacs/declare-prefix "C-q" "Quit")
   (spacemacs/set-leader-keys
     "C-q" (key-binding (kbd "SPC q"))
     "q" nil)
+  (spacemacs/declare-prefix "C-q" "Quit")
 
   (evil-define-key (list 'insert 'hybrid) markdown-mode-map (kbd "<tab>") #'hippie-expand)
   (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand)
