@@ -92,6 +92,8 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 (setq-default org-cycle-separator-lines 1)
 (setq-default org-adapt-indentation t)
+(setq-default org-refile-targets (list '(nil :maxlevel . 2)))
+(setq-default org-refile-allow-creating-parent-nodes 'confirm)
 
 (setq-default org-archive-location ".archive.%s::")
 (setq-default org-archive-file-header-format "Archived entries from file =%s=:\n\n")
