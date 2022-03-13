@@ -105,6 +105,7 @@ ARGS is a list of string arguments forwarded to rclone."
       (insert command)
       (shell-mode)
       (evil-normal-state)
+      (switch-to-buffer-other-window buf)
       (let ((process (get-buffer-process buf)))
         (set-process-sentinel
          process
