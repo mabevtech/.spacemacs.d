@@ -2,33 +2,40 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'helm)
+(require 'core-keybindings)
 (require 'subr-x)
+(require 'helm)
 (require 'evil-jumps)
 
-(spacemacs/set-leader-keys "x r h" #'helm-regexp)
+(with-eval-after-load 'helm-regexp
+  (spacemacs/set-leader-keys "x r h" #'helm-regexp))
 
-(defun mabo3n/helm-jump-in-buffer ()
-  "Store `point' value then prompt."
-  (interactive)
-  (setq mabo3n/point-before-helm-jump-in-buffer (point))
-  (lazy-helm/spacemacs/helm-jump-in-buffer))
+(with-eval-after-load 'evil-jumps
+  (defvar mabo3n/point-before-helm-jump-in-buffer)
 
-(spacemacs/set-leader-keys "s j" #'mabo3n/helm-jump-in-buffer)
+  (defun mabo3n/helm-jump-in-buffer ()
+    "Store `point' value then prompt."
+    (interactive)
+    (setq mabo3n/point-before-helm-jump-in-buffer (point))
+    (lazy-helm/spacemacs/helm-jump-in-buffer))
 
-(defun mabo3n/set-evil-jump-previous-position ()
-  "If `point' has changed, set an evil jump to its previous position."
-  (when-let* ((prev-point mabo3n/point-before-helm-jump-in-buffer)
-              (changedp (not (eq (point) prev-point))))
-    (evil-set-jump prev-point)))
+  (spacemacs/set-leader-keys "s j" #'mabo3n/helm-jump-in-buffer)
 
-(add-hook 'imenu-after-jump-hook #'mabo3n/set-evil-jump-previous-position)
+  (defun mabo3n/set-evil-jump-previous-position ()
+    "If `point' has changed, set an evil jump to its previous position."
+    (when-let* ((prev-point mabo3n/point-before-helm-jump-in-buffer)
+                (changedp (not (eq (point) prev-point))))
+      (evil-set-jump prev-point)))
+
+  (add-hook 'imenu-after-jump-hook #'mabo3n/set-evil-jump-previous-position))
 
 ;; Make `helm-find-files' always expand symlinks to directories
 ;; This was the default behavior but now requires a prefix arg
 ;; https://github.com/emacs-helm/helm/issues/1121
 (defun mabo3n/helm-ff-always-expand-symlink-dirs (fun &rest args)
-  "Set `current-prefix-arg' if current selection is a dir symlink."
+  "Set `current-prefix-arg' if current selection is a dir symlink.
+
+Advice :around FUN with ARGS."
   (let ((candidate (car args)))
     (when (and candidate
                (not current-prefix-arg)
