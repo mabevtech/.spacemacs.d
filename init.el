@@ -369,7 +369,23 @@ before packages are loaded."
                 (changedp (not (eq (point) prev-point))))
       (evil-set-jump prev-point)))
   (add-hook 'imenu-after-jump-hook #'mabo3n/set-evil-jump-previous-position)
-  )
+
+  ;; Make `helm-find-files' always expand symlinks to directories
+  ;; This was the default behavior but now requires a prefix arg
+  ;; https://github.com/emacs-helm/helm/issues/1121
+  (defun mabo3n/helm-ff-always-expand-symlink-dirs (fun &rest args)
+    "Set `current-prefix-arg' if current selection is a dir symlink."
+    (let ((candidate (car args)))
+      (when (and candidate
+                 (not current-prefix-arg)
+                 (file-directory-p candidate)
+                 (file-symlink-p candidate))
+        (message "Auto applying C-u to expand symlink")
+        (setq current-prefix-arg '(4)))
+      (apply fun args)))
+
+  (advice-add #'helm-find-files-persistent-action-if :around
+              #'mabo3n/helm-ff-always-expand-symlink-dirs))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
