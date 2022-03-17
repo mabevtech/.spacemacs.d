@@ -96,7 +96,10 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (setq-default org-refile-allow-creating-parent-nodes 'confirm)
 
 (setq-default org-archive-location ".archive.%s::")
-(setq-default org-archive-file-header-format "Archived entries from file =%s=:\n\n")
+(setq-default org-archive-file-header-format
+              (concat ";;; -*- mode: org; -*-\n"
+                      "Archived entries from file =%s=:\n"
+                      "\n"))
 
 (provide 'init-org)
 ;;; init-org.el ends here
