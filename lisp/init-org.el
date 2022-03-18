@@ -9,7 +9,7 @@
 
 ;;; org-capture
 
-(defconst mabo3n/default-tasks-file (expand-file-name "tasks.org" org-directory)
+(defconst mabo3n/default-tasks-file (expand-file-name "tasks" org-directory)
   "Default tasks file.")
 (defconst mabo3n/default-tasks-headline "New"
   "Default tasks headline in tasks file.")
@@ -66,14 +66,14 @@ inside the `org-capture' buffer with `org-capture-refile')."
          "* TODO %?\n  %U\n  %a" :clock-resume t)
 
         ("j" "Journal entry" entry
-         (file+olp+datetree "journal.org")
+         (file+olp+datetree "journal")
          "* %U\n  %?" :empty-lines 1)
 
         ("n" "Note" entry
          (file "")  ;; "" => `org-default-notes-file'
          "* %? :NOTE:\n  %U" :clock-resume t)
 
-        ("c" "Company" entry (file+headline "~/docs/ip.org" "Companies")
+        ("c" "Company" entry (file+headline "~/org/ip" "Companies")
          "* %^{Name}%?")
         ))
 
@@ -95,6 +95,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (setq-default org-refile-targets (list '(nil :maxlevel . 2)))
 (setq-default org-refile-allow-creating-parent-nodes 'confirm)
 
+(setq-default org-default-notes-file (expand-file-name "notes" org-directory))
 (setq-default org-archive-location ".archive.%s::")
 (setq-default org-archive-file-header-format
               (concat ";;; -*- mode: org; -*-\n"
