@@ -101,6 +101,12 @@ inside the `org-capture' buffer with `org-capture-refile')."
               (concat ";;; -*- mode: org; -*-\n"
                       "Archived entries from file =%s=:\n"
                       "\n"))
+(setq-default
+ org-agenda-file-regexp
+ (rx bos
+     (or (seq (not (any ?.)) (0+ nonl) ".org")
+         (seq (0+ nonl) (or "journal" "notes" "tasks")))
+     eos))
 
 (provide 'init-org)
 ;;; init-org.el ends here
