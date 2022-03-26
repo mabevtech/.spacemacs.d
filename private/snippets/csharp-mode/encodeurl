@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: HttpUtility.UrlPathEncode(url);
+# key: encodeurl
+# --
+HttpUtility.UrlPathEncode($0);
