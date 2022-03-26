@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# contributor: mabo3n
+# name: HTTP GET request example
+# key: httpget
+# --
+var url = "http://httpbin.org/ip";
+var client = new HttpClient();
+var response = await client.GetAsync(url);
+var content = await response.Content.ReadFromJsonAsync<IpResponse>();
+class IpResponse { public string? origin { get; set; } }
