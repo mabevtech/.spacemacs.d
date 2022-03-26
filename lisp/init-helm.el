@@ -29,6 +29,17 @@
 
   (add-hook 'imenu-after-jump-hook #'mabo3n/set-evil-jump-previous-position))
 
+(with-eval-after-load 'helm-company
+  ;; Make documentation lookup work in 'helm-company
+  (defun mabo3n/helm-company-display-document-buffer (buffer)
+    "Display buffer without predefined actions (nil)."
+    (with-current-buffer buffer
+      (goto-char (point-min)))
+    (display-buffer buffer nil))
+  (advice-add #'helm-company-display-document-buffer :override
+              #'mabo3n/helm-company-display-document-buffer)
+  )
+
 ;; Make `helm-find-files' always expand symlinks to directories
 ;; This was the default behavior but now requires a prefix arg
 ;; https://github.com/emacs-helm/helm/issues/1121
