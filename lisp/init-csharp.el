@@ -16,14 +16,29 @@
   "Whether the current project is a dotnet solution."
   (projectile-verify-file-wildcard "?*.sln"))
 
+(defun mabo3n/projectile-dotnet-project-p ()
+  "Whether the current project is a dotnet one."
+  (projectile-verify-file-wildcard "?*.csproj"))
+
 (with-eval-after-load 'projectile
   (projectile-register-project-type
-   'dotnet-sln #'mabo3n/projectile-dotnet-solution-p
+   'dotnet-sln
+   #'mabo3n/projectile-dotnet-solution-p
    :src-dir "src/"
    :test-dir "tests/"
    :compile "cd src/ && dotnet build"
    :run "cd src/ && dotnet run"
    :test "cd tests/ && dotnet test"
+   :test-suffix "Tests")
+
+  (projectile-register-project-type
+   'dotnet
+   #'mabo3n/projectile-dotnet-project-p
+   :src-dir "./"
+   :test-dir "./"
+   :compile "dotnet build"
+   :run "dotnet run"
+   :test "dotnet test"
    :test-suffix "Tests"))
 
 ;;; omnisharp
