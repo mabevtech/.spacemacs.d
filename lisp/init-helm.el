@@ -30,6 +30,8 @@
   (add-hook 'imenu-after-jump-hook #'mabo3n/set-evil-jump-previous-position))
 
 (with-eval-after-load 'helm-company
+  (define-key company-active-map (kbd "C-SPC") 'helm-company)
+
   ;; Make documentation lookup work in 'helm-company
   (defun mabo3n/helm-company-display-document-buffer (buffer)
     "Display buffer without predefined actions (nil)."
