@@ -3,7 +3,7 @@
 # name: public void Method(...) { ... }
 # key: method
 # --
-${4:public} ${3:void} ${1:Method}($2)
+${4:public }${3:void} ${1:Method}($2)
 {
     $0
 }
