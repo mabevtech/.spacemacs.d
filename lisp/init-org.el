@@ -90,7 +90,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 (add-hook 'org-mode-hook (lambda () (setq show-trailing-whitespace t)))
 
-(setq-default org-cycle-separator-lines 1)
+(setq-default org-cycle-separator-lines 2)
 (setq-default org-adapt-indentation t)
 (setq-default org-refile-targets (list '(nil :maxlevel . 2)))
 (setq-default org-refile-allow-creating-parent-nodes 'confirm)
