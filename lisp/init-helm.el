@@ -29,7 +29,8 @@
 
   (add-hook 'imenu-after-jump-hook #'mabo3n/set-evil-jump-previous-position))
 
-(define-key company-active-map (kbd "C-SPC") 'helm-company)
+(with-eval-after-load 'company
+  (define-key company-active-map (kbd "C-SPC") 'helm-company))
 
 (with-eval-after-load 'helm-company
   ;; Make documentation lookup work in 'helm-company
