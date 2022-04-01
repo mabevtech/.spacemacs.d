@@ -73,7 +73,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
          (file "")  ;; "" => `org-default-notes-file'
          "* %? :NOTE:\n  %U" :clock-resume t)
 
-        ("c" "Company" entry (file+headline "~/org/ip" "Companies")
+        ("c" "Company" entry (file+headline "~/docs/prep/companies.org" "Companies")
          "* %^{Name}%?")
         ))
 
