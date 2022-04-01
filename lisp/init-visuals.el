@@ -34,6 +34,7 @@
   )
 
 (setq-default doom-modeline-buffer-file-name-style 'truncate-with-project)
+(setq-default doom-modeline-project-detection 'project)
 
 (provide 'init-visuals)
 ;;; init-visuals.el ends here
