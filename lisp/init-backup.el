@@ -18,7 +18,7 @@
 
 (defconst mabo3n/backup-files-path-transformations
   `(("^Documents" . "docs")
-    ("^Downloads" . "downs")
+    ("^Downloads" . "down")
     ("^Pictures"  . "pics")
     ("^Desktop"   . "desk")
     ("^\\."       . ,(concat (file-name-as-directory "dot") ".")))
