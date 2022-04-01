@@ -12,6 +12,10 @@
 (defconst mabo3n/backup-files-remote-root "d:"
   "Where `mabo3n/backup-file' moves files to.")
 
+(defconst mabo3n/backup-files-default-args
+  (list "-L" "--exclude=\".DS_Store\"")
+  "Default args used by `mabo3n/backup-file'.")
+
 (defconst mabo3n/backup-files-path-transformations
   `(("^Documents" . "docs")
     ("^Downloads" . "downs")
@@ -84,7 +88,7 @@ ARGS is a list of string arguments forwarded to rclone."
              (unless destination-file
                (message "Couldn't get remote path for \"%s\"" expanded-file)
                (throw 'continue nil))
-             (concat (format "rclone copy -L %s %s"
+             (concat (format "rclone copy %s %s"
                              expanded-file
                              destination-file)
                      (and args " ")
@@ -120,11 +124,14 @@ ARGS is a list of string arguments forwarded to rclone."
 (defun mabo3n/backup-file (file &optional args)
   "Upload FILE to cloud under `mabo3n/backup-files-remote-root'.
 
-This builds and executes an rclone's copy command for FILE using
-each arg in ARGS. FILE can be a file path or list of file paths.
+This builds and executes an rclone's copy command for FILE using ARGS.
 
-When called interactively, prompts for a file and use no ARGS.
-With a `\\[universal-argument]', also prompts for single arg string.
+FILE can be a file path or list of file paths.
+ARGS is a list of args. If nil, defaults to
+`mabo3n/backup-files-default-args'.
+
+When called interactively, prompts for a file and use default ARGS.
+With a `\\[universal-argument]', also prompts for an argument string.
 
 Backing up files outside of, or the whole `user-home-directory',
 is not allowed (they are ignored).
@@ -139,9 +146,12 @@ about rclone's copy command behavior."
                          :initial-input (or (dired-get-filename nil t)
                                             (buffer-file-name)
                                             default-directory)))))
+         (default-args mabo3n/backup-files-default-args)
          (args (or (and (consp current-prefix-arg)
-                        (list (read-string "args: ")))
-                   args))
+                        (list (read-string
+                               "args: "
+                               (string-join default-args " "))))
+                   default-args))
          (command (-> (if (listp file) file (list file))
                       (mabo3n/backup-files--build-backup-command args)
                       (string-join ";\n"))))
