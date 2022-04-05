@@ -18,7 +18,44 @@
 (defvar mabo3n/tasks-headline mabo3n/default-tasks-headline
   "Headline to store `org-capture' task entries.")
 
-(defun mabo3n/org-capture-file+headline-function (&optional prompt-defaults)
+(defun mabo3n/org-capture-find-file-function (file)
+  "Find FILE to insert the capture template.
+
+This mimics the \"file+headline\" option's default behavior
+to find the file, found in `org-capture-set-target-location'."
+  (set-buffer (org-capture-target-buffer file))
+  (unless (derived-mode-p 'org-mode)
+    (org-display-warning
+     (format "Capture requirement: switching buffer %S to Org mode"
+             (current-buffer)))
+    (org-mode))
+  (org-capture-put-target-region-and-position)
+  (widen))
+
+(defun mabo3n/org-capture-find-headline-function (headline &optional level)
+  "Find (or create) HEADLINE to insert the capture template.
+
+This mimics the \"file+headline\" option's default behavior
+to find the headline, found in `org-capture-set-target-location'.
+
+The default behavior is to try to find a headline at any level,
+and to create a top (1) level headline if not found.
+
+This function also accepts an optional LEVEL argument which,
+if is a number, restrict the search to and use LEVEL for creation."
+  (goto-char (point-min))
+  (if (and (re-search-forward (format org-complex-heading-regexp-format
+                                      (regexp-quote headline))
+                              nil t)
+           (or (and (numberp level) (= (org-outline-level) level))
+               t))
+      (beginning-of-line)
+    (goto-char (point-max))
+    (unless (bolp) (insert "\n"))
+    (insert (concat (make-string (or level 1) ?*) " ") headline "\n")
+    (beginning-of-line 0)))
+
+(defun mabo3n/org-capture-tasks-find-location-function (&optional prompt-defaults)
   "Captures into `mabo3n/tasks-file' within `mabo3n/tasks-headline'.
 
 This provides an alternative for org-capture's file+headline target
@@ -29,32 +66,16 @@ If PROMPT-DEFAULTS is non-nil, prompts for the file with
 `mabo3n/default-tasks-file' selected, and defaults to
 `mabo3n/default-tasks-headline' as headline (which can be changed
 inside the `org-capture' buffer with `org-capture-refile')."
-  (let ((buffer
-         (org-capture-target-buffer
-          (or (and prompt-defaults (helm-read-file-name
-                                    "File: "
-                                    ;; :test (apply-partially #'string-suffix-p ".org")
-                                    :initial-input mabo3n/default-tasks-file))
-              mabo3n/tasks-file)))
+  (let ((file (or (and prompt-defaults
+                       (helm-read-file-name
+                        "File: "
+                        ;; :test (apply-partially #'string-suffix-p ".org")
+                        :initial-input mabo3n/default-tasks-file))
+                  mabo3n/tasks-file))
         (headline (or (and prompt-defaults mabo3n/default-tasks-headline)
                       mabo3n/tasks-headline)))
-    (set-buffer buffer)
-    (unless (derived-mode-p 'org-mode)
-      (org-display-warning
-       (format "Capture requirement: switching buffer %S to Org mode"
-               (current-buffer)))
-      (org-mode))
-    (org-capture-put-target-region-and-position)
-    (widen)
-    (goto-char (point-min))
-    (if (re-search-forward (format org-complex-heading-regexp-format
-                                   (regexp-quote headline))
-                           nil t)
-        (beginning-of-line)
-      (goto-char (point-max))
-      (unless (bolp) (insert "\n"))
-      (insert "* " headline "\n")
-      (beginning-of-line 0))))
+    (mabo3n/org-capture-find-file-function file)
+    (mabo3n/org-capture-find-headline-function headline)))
 
 (setq org-capture-templates
       '(("t" "Task" entry
