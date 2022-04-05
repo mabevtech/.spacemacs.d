@@ -150,6 +150,21 @@ See function `mabo3n/org-capture-dive-to-headline' for more details."
     (org-insert-last-stored-link 1)             ;; striping the \n
     (buffer-substring-no-properties (point-min) (1- (point-max)))))
 
+(defun mabo3n/org-capture-jobs-read-new-company ()
+  "Read a (new) company name for the Jobs / Company template."
+  (with-current-buffer (org-capture-target-buffer
+                        "~/docs/jobs/companies.org")
+    (mabo3n/org-capture-read-headline
+     "LEVEL=2+company" "Company name: " t)))
+
+(defun mabo3n/org-capture-jobs-position-find-headline-function ()
+  "Find location function for Jobs / Position capture."
+  (mabo3n/org-capture-dive-to-headline '(("LEVEL=2+company" . "Companies: ")))
+  (save-restriction
+    (org-narrow-to-subtree)
+    (mabo3n/org-capture-find-headline-function "Positions" 3)
+    (org-set-tags ":position:")))
+
 (setq org-capture-templates
       '(("t" "Task" entry
          (function mabo3n/org-capture-tasks-find-location-function)
@@ -177,11 +192,54 @@ See function `mabo3n/org-capture-dive-to-headline' for more details."
          "* %? :note:
   %U"
          :clock-resume t)
+
+        ("$" "Jobs")
+
+        ("$c" "Company" entry
+         (file+headline "~/docs/jobs/companies.org" "Companies")
+         "* REVIEW %(mabo3n/org-capture-jobs-read-new-company)
+  :LOGBOOK:%^{Source}p%^{Source_link}p
+  - State \"REVIEW\"     from              %U
+  :END:"
+         :immediate-finish t)
+
+        ("$p" "Position" entry
+         (file+function "~/docs/jobs/companies.org"
+                        mabo3n/org-capture-jobs-position-find-headline-function)
+         "* %^{Title}"
+         :immediate-finish t :jump-to-captured t)
+
+        ("$a" "Application" entry
+         (file+headline "~/docs/jobs/processes.org" "Processes")
+         "* %(mabo3n/org-capture-template-read-headline-link
+              \"~/docs/jobs/companies.org\"
+              '((\"LEVEL=2+company\"))) / %(helm-read-string
+                                            \"Title: \")%^{Webpage}p%?"
+         :immediate-finish t :jump-to-captured t)
+
+        ("$i" "Interview" entry
+         (file+function "~/docs/jobs/processes.org"
+                        (lambda ()
+                          (mabo3n/org-capture-dive-to-headline
+                           '(("LEVEL=2+process" . "Application: ")))))
+         "* Interview (%^{Type|Phone screen|Technical screen|Other}) :interview:
+  %^T"
+         :immediate-finish t :jump-to-captured t)
+
+        ("$s" "Step" entry
+         (file+function "~/docs/jobs/processes.org"
+                        (lambda ()
+                          (mabo3n/org-capture-dive-to-headline
+                           '(("LEVEL=2+process" . "Application: ")))))
+         "* %^{Step}
+  DEADLINE: %^t"
+         :immediate-finish t :jump-to-captured t)
         ))
 
 ;; Open org capture buffer in insert state (Adding to end of list
 ;; cause `spacemacs//org-capture-start' manually sets to normal state)
 (add-hook 'org-capture-mode-hook 'evil-insert-state 1)
+(add-hook 'org-log-buffer-setup-hook #'evil-insert-state)
 
 ;;; misc
 
