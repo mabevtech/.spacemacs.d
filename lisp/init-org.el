@@ -9,15 +9,6 @@
 
 ;;; org-capture
 
-(defconst mabo3n/default-tasks-file (expand-file-name "tasks" org-directory)
-  "Default tasks file.")
-(defconst mabo3n/default-tasks-headline "New"
-  "Default tasks headline in tasks file.")
-(defvar mabo3n/tasks-file mabo3n/default-tasks-file
-  "File to store `org-capture' task entries.")
-(defvar mabo3n/tasks-headline mabo3n/default-tasks-headline
-  "Headline to store `org-capture' task entries.")
-
 (defun mabo3n/org-capture-find-file-function (file)
   "Find FILE to insert the capture template.
 
@@ -54,28 +45,6 @@ if is a number, restrict the search to and use LEVEL for creation."
     (unless (bolp) (insert "\n"))
     (insert (concat (make-string (or level 1) ?*) " ") headline "\n")
     (beginning-of-line 0)))
-
-(defun mabo3n/org-capture-tasks-find-location-function (&optional prompt-defaults)
-  "Captures into `mabo3n/tasks-file' within `mabo3n/tasks-headline'.
-
-This provides an alternative for org-capture's file+headline target
-with dynamic files and headlines. Code is adapted from file+headline
-option code in `org-capture-set-target-location'.
-
-If PROMPT-DEFAULTS is non-nil, prompts for the file with
-`mabo3n/default-tasks-file' selected, and defaults to
-`mabo3n/default-tasks-headline' as headline (which can be changed
-inside the `org-capture' buffer with `org-capture-refile')."
-  (let ((file (or (and prompt-defaults
-                       (helm-read-file-name
-                        "File: "
-                        ;; :test (apply-partially #'string-suffix-p ".org")
-                        :initial-input mabo3n/default-tasks-file))
-                  mabo3n/tasks-file))
-        (headline (or (and prompt-defaults mabo3n/default-tasks-headline)
-                      mabo3n/tasks-headline)))
-    (mabo3n/org-capture-find-file-function file)
-    (mabo3n/org-capture-find-headline-function headline)))
 
 (defun mabo3n/org-capture-read-headline (&optional match prompt allow-new)
   "Read a headline name matching MATCH in current buffer.
@@ -150,6 +119,41 @@ See function `mabo3n/org-capture-dive-to-headline' for more details."
     (org-insert-last-stored-link 1)             ;; striping the \n
     (buffer-substring-no-properties (point-min) (1- (point-max)))))
 
+;;; org-capture / Tasks
+
+(defconst mabo3n/default-tasks-file (expand-file-name "tasks" org-directory)
+  "Default tasks file.")
+(defconst mabo3n/default-tasks-headline "New"
+  "Default tasks headline in tasks file.")
+(defvar mabo3n/tasks-file mabo3n/default-tasks-file
+  "File to store `org-capture' task entries.")
+(defvar mabo3n/tasks-headline mabo3n/default-tasks-headline
+  "Headline to store `org-capture' task entries.")
+
+(defun mabo3n/org-capture-tasks-find-location-function (&optional prompt-defaults)
+  "Captures into `mabo3n/tasks-file' within `mabo3n/tasks-headline'.
+
+This provides an alternative for org-capture's file+headline target
+with dynamic files and headlines. Code is adapted from file+headline
+option code in `org-capture-set-target-location'.
+
+If PROMPT-DEFAULTS is non-nil, prompts for the file with
+`mabo3n/default-tasks-file' selected, and defaults to
+`mabo3n/default-tasks-headline' as headline (which can be changed
+inside the `org-capture' buffer with `org-capture-refile')."
+  (let ((file (or (and prompt-defaults
+                       (helm-read-file-name
+                        "File: "
+                        ;; :test (apply-partially #'string-suffix-p ".org")
+                        :initial-input mabo3n/default-tasks-file))
+                  mabo3n/tasks-file))
+        (headline (or (and prompt-defaults mabo3n/default-tasks-headline)
+                      mabo3n/tasks-headline)))
+    (mabo3n/org-capture-find-file-function file)
+    (mabo3n/org-capture-find-headline-function headline)))
+
+;;; org-capture / Jobs
+
 (defun mabo3n/org-capture-jobs-read-new-company ()
   "Read a (new) company name for the Jobs / Company template."
   (with-current-buffer (org-capture-target-buffer
@@ -164,6 +168,8 @@ See function `mabo3n/org-capture-dive-to-headline' for more details."
     (org-narrow-to-subtree)
     (mabo3n/org-capture-find-headline-function "Positions" 3)
     (org-set-tags ":position:")))
+
+;;; org-capture / templates
 
 (setq org-capture-templates
       '(("t" "Task" entry
