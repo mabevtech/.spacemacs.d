@@ -152,23 +152,31 @@ See function `mabo3n/org-capture-dive-to-headline' for more details."
 
 (setq org-capture-templates
       '(("t" "Task" entry
-         (function mabo3n/org-capture-file+headline-function)
-         "* TODO %?\n  %U\n  %a" :clock-resume t)
+         (function mabo3n/org-capture-tasks-find-location-function)
+         "* TODO %?
+  %U
+  %a"
+         :clock-resume t)
 
         ("T" "Task (prompt)" entry
-         (function (lambda () (mabo3n/org-capture-file+headline-function t)))
-         "* TODO %?\n  %U\n  %a" :clock-resume t)
+         (function (lambda ()
+                     (mabo3n/org-capture-tasks-find-location-function t)))
+         "* TODO %?
+  %U
+  %a"
+         :clock-resume t)
 
         ("j" "Journal entry" entry
          (file+olp+datetree "journal")
-         "* %U\n  %?" :empty-lines 1)
+         "* %U
+  %?"
+         :empty-lines 1)
 
         ("n" "Note" entry
          (file "")  ;; "" => `org-default-notes-file'
-         "* %? :NOTE:\n  %U" :clock-resume t)
-
-        ("c" "Company" entry (file+headline "~/docs/prep/companies.org" "Companies")
-         "* %^{Name}%?")
+         "* %? :note:
+  %U"
+         :clock-resume t)
         ))
 
 ;; Open org capture buffer in insert state (Adding to end of list
