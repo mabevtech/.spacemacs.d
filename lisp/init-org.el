@@ -77,6 +77,79 @@ inside the `org-capture' buffer with `org-capture-refile')."
     (mabo3n/org-capture-find-file-function file)
     (mabo3n/org-capture-find-headline-function headline)))
 
+(defun mabo3n/org-capture-read-headline (&optional match prompt allow-new)
+  "Read a headline name matching MATCH in current buffer.
+
+MATCH is a tags/property/todo match as it is used in the agenda tags view.
+PROMPT is the text of the completion. Defaults to \"Headline: \".
+ALLOW-NEW if non-nil lets the user input any string, even if it doesn't
+match an existing headline.
+
+When called interactively, prompts for MATCH string first.
+With a \\[universal-argument], ALLOW-NEW is t."
+  (interactive "sMatch string: \ni\nP")
+  (let ((headlines
+         (org-map-entries (apply-partially 'org-entry-get nil "ITEM")
+                          match))
+        (prompt (or prompt "Headline: ")))
+    (helm-comp-read prompt headlines :must-match (not allow-new))))
+
+(defun mabo3n/org-capture-dive-to-headline (match-sequence &optional allow-new)
+  "Read a headline according to MATCH-SEQUENCE in current buffer.
+
+This acts like a recursive version of `mabo3n/org-capture-read-headline',
+where MATCH-SEQUENCE is a list of MATCH strings or (MATCH . PROMPT) entries.
+
+For example:
+  '(nil      ;; Prompt for any headline first
+    (\"+country+tropics\" . \"Choose a country: \")
+    (nil . \"Which state:\")
+    \"+beach-cold\")
+
+Note that headline search is performed by plain text.
+If multiple headlines have the same text, the first one is chosen.
+Point is left in the line of the last searched subheading.
+
+ALLOW-NEW if non-nil lets the user input any string
+as the last headline, even if it doesn't match an existing one.
+
+When called interactively, prompts for MATCH-SEQUENCE string first.
+With a \\[universal-argument], ALLOW-NEW is t."
+  (interactive "xRaw match-sequence: \nP")
+  (save-restriction
+    (cl-loop
+     with length = (length match-sequence)
+     for entry in match-sequence
+     for match = (if (consp entry) (car entry) entry)
+     for prompt = (if (consp entry) (cdr entry) nil)
+     for index from 1
+     for lastp = (= index length)
+     for headline = (mabo3n/org-capture-read-headline
+                     match prompt (and lastp allow-new))
+     do (mabo3n/org-capture-find-headline-function
+         headline
+         ;; FIXME if match-sequence has 1 entry and allow-new is
+         ;; non-nil, "new" headings will be created with the level
+         ;; of the entry under point when the function was called.
+         (when lastp (1+ (org-outline-level))))
+        (org-narrow-to-subtree))))
+
+(defun mabo3n/org-capture-template-read-headline-link (file match-sequence)
+  "Return a link to a headline read through MATCH-SEQUENCE in FILE.
+
+This can be used in templates to expand to a link to a headline,
+which is chosen interactively by a sequential of [parent] headline prompts
+according to MATCH-SEQUENCE.
+See function `mabo3n/org-capture-dive-to-headline' for more details."
+  (with-current-buffer (org-capture-target-buffer file)
+     (mabo3n/org-capture-dive-to-headline match-sequence)
+     ;; apparently this doesn't word non-interactively
+     ;; https://narkive.com/RtJ6Kjrt.1
+     (call-interactively 'org-store-link))
+  (with-temp-buffer
+    (org-insert-last-stored-link 1)             ;; striping the \n
+    (buffer-substring-no-properties (point-min) (1- (point-max)))))
+
 (setq org-capture-templates
       '(("t" "Task" entry
          (function mabo3n/org-capture-file+headline-function)
