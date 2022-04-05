@@ -3,6 +3,7 @@
 ;;; Code:
 
 ;; (require 'org)
+;; (require 'org-id)
 ;; (require 'org-capture)
 ;; (require 'org-agenda)
 ;; (require 'helm-mode)
@@ -260,6 +261,9 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (setq-default org-adapt-indentation t)
 (setq-default org-refile-targets (list '(nil :maxlevel . 2)))
 (setq-default org-refile-allow-creating-parent-nodes 'confirm)
+(setq-default org-log-into-drawer t)
+(setq-default org-id-link-to-org-use-id 'use-existing)
+(setq-default org-startup-folded 'show2levels)
 
 (setq-default org-default-notes-file (expand-file-name "notes" org-directory))
 (setq-default org-archive-location ".archive.%s::")
