@@ -204,8 +204,9 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
         ("$c" "Company" entry
          (file+headline "~/docs/jobs/companies.org" "Companies")
-         "* REVIEW %(mabo3n/org-capture-jobs-read-new-company)
-  :LOGBOOK:%^{Source}p%^{Source_link}p
+         "* REVIEW %(mabo3n/org-capture-jobs-read-new-company
+                    )%^{Source}p%^{Source_link}p  %^g
+  :LOGBOOK:
   - State \"REVIEW\"     from              %U
   :END:"
          :immediate-finish t)
@@ -213,8 +214,12 @@ inside the `org-capture' buffer with `org-capture-refile')."
         ("$p" "Position" entry
          (file+function "~/docs/jobs/companies.org"
                         mabo3n/org-capture-jobs-position-find-headline-function)
-         "* %^{Title}"
-         :immediate-finish t :jump-to-captured t)
+         "* %^{Title} (%^{Minimum yoe}+ yoe)
+  :PROPERTIES:
+  :Yoe: %\\2
+  :END:
+  [[%^{Link}][Link]]%?"
+         :jump-to-captured t)
 
         ("$a" "Application" entry
          (file+headline "~/docs/jobs/processes.org" "Processes")
