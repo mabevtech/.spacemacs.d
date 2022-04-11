@@ -32,5 +32,8 @@ Forward BEG, END and ARGS to `evil-yank'"
 (defun mabo3n/goto-last-edit () (interactive) (evil-goto-mark ?. t))
 (define-key evil-normal-state-map (kbd "U") #'mabo3n/goto-last-edit)
 
+;; Try to be less aggressive with the undos
+(setq-default evil-want-fine-undo t)
+
 (provide 'init-evil)
 ;;; init-evil.el ends here
