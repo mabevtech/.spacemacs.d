@@ -283,5 +283,15 @@ inside the `org-capture' buffer with `org-capture-refile')."
          (seq (0+ nonl) (or "journal" "notes" "tasks")))
      eos))
 
+(with-eval-after-load 'org-pomodoro
+  (setq-default org-pomodoro-time-format "%.2m")
+  (if (package-installed-p 'all-the-icons)
+      (setq-default org-pomodoro-format "%s"
+                    org-pomodoro-short-break-format "%s"
+                    org-pomodoro-long-break-format "%s")
+    (setq-default org-pomodoro-format "P~%s"
+                  org-pomodoro-short-break-format "B~%s"
+                  org-pomodoro-long-break-format "L~%s")))
+
 (provide 'init-org)
 ;;; init-org.el ends here
