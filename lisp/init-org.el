@@ -200,9 +200,9 @@ inside the `org-capture' buffer with `org-capture-refile')."
   %U"
          :clock-resume t)
 
-        ("$" "Jobs")
+        ("J" "Jobs")
 
-        ("$c" "Company" entry
+        ("Jc" "Company" entry
          (file+headline "~/docs/jobs/companies.org" "Companies")
          "* REVIEW %(mabo3n/org-capture-jobs-read-new-company
                     )%^{Source}p%^{Source_link}p  %^g
@@ -211,7 +211,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
   :END:"
          :immediate-finish t)
 
-        ("$p" "Position" entry
+        ("Jp" "Position" entry
          (file+function "~/docs/jobs/companies.org"
                         mabo3n/org-capture-jobs-position-find-headline-function)
          "* %^{Title} (%^{Minimum yoe}+ yoe)
@@ -221,7 +221,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
   [[%^{Link}][Link]]%?"
          :jump-to-captured t)
 
-        ("$a" "Application" entry
+        ("Ja" "Application" entry
          (file+headline "~/docs/jobs/processes.org" "Processes")
          "* %(mabo3n/org-capture-template-read-headline-link
               \"~/docs/jobs/companies.org\"
@@ -229,7 +229,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
                                             \"Title: \")%^{Webpage}p%?"
          :immediate-finish t :jump-to-captured t)
 
-        ("$i" "Interview" entry
+        ("Ji" "Interview" entry
          (file+function "~/docs/jobs/processes.org"
                         (lambda ()
                           (mabo3n/org-capture-dive-to-headline
@@ -238,7 +238,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
   %^T"
          :immediate-finish t :jump-to-captured t)
 
-        ("$s" "Step" entry
+        ("Js" "Step" entry
          (file+function "~/docs/jobs/processes.org"
                         (lambda ()
                           (mabo3n/org-capture-dive-to-headline
