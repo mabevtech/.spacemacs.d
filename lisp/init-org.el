@@ -192,7 +192,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
          (file+olp+datetree "journal")
          "* %U
   %?"
-         :empty-lines 1)
+         :tree-type week)
 
         ("n" "Note" entry
          (file "")  ;; "" => `org-default-notes-file'
