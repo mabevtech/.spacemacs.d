@@ -264,7 +264,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 (setq-default org-cycle-separator-lines 2)
 (setq-default org-adapt-indentation t)
-(setq-default org-refile-targets (list '(nil :maxlevel . 2)))
+(setq-default org-refile-targets '((nil :maxlevel . 1)))
 (setq-default org-refile-allow-creating-parent-nodes 'confirm)
 (setq-default org-log-into-drawer t)
 (setq-default org-id-link-to-org-use-id 'use-existing)
