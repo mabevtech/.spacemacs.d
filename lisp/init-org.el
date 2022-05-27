@@ -178,7 +178,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
          "* TODO %?
   %U
   %a"
-         :clock-resume t)
+         :clock-resume t :kill-buffer t)
 
         ("T" "Task (prompt)" entry
          (function (lambda ()
@@ -186,19 +186,19 @@ inside the `org-capture' buffer with `org-capture-refile')."
          "* TODO %?
   %U
   %a"
-         :clock-resume t)
+         :clock-resume t :kill-buffer t)
 
         ("j" "Journal entry" entry
          (file+olp+datetree "journal")
          "* %U
   %?"
-         :tree-type week)
+         :tree-type week :kill-buffer t)
 
         ("n" "Note" entry
          (file "")  ;; "" => `org-default-notes-file'
          "* %? :note:
   %U"
-         :clock-resume t)
+         :clock-resume t :kill-buffer t)
 
         ("J" "Jobs")
 
