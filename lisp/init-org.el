@@ -205,7 +205,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
         ("Jc" "Company" entry
          (file+headline "~/docs/jobs/companies.org" "Companies")
          "* REVIEW %(mabo3n/org-capture-jobs-read-new-company
-                    )%^{Source}p%^{Source_link}p  %^g
+                    )%^{Source}p%^{Source_link}p
   :LOGBOOK:
   - State \"REVIEW\"     from              %U
   :END:"
