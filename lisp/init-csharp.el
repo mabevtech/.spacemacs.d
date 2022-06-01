@@ -57,6 +57,11 @@
   "s l" #'mabo3n/switch-to-omnisharp-log-buffer
   "s L" #'mabo3n/switch-to-omnisharp-log-buffer-other-window)
 
+(spacemacs/set-leader-keys-for-major-mode 'csharp-mode
+  ;; Replaces `spacemacs/jump-to-definition'
+  ;; which is not working properly for csharp-mode
+  "g g" #'omnisharp-go-to-definition)
+
 (setq-default omnisharp-debug nil
               omnisharp-imenu-support t)
 
