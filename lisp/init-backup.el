@@ -168,7 +168,7 @@ Uses `mabo3n/backup-file' with ARGS."
 
 \".gitconfig\"
 \".bashrc\" \".bash_profile\" \".bash_aliases\"
-\".config/nvim/\" \".vimrc\"
+\".config/\" \".vimrc\"
 
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
@@ -177,7 +177,7 @@ Uses `mabo3n/backup-recent-files' with ARGS."
                                      user-home-directory))
            '(".gitconfig"
              ".bashrc" ".bash_profile" ".bash_aliases"
-             ".config/nvim/" ".vimrc"))
+             ".config/" ".vimrc"))
    args))
 
 (defun mabo3n/backup-org-files (&optional args)
