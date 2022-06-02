@@ -88,7 +88,7 @@ ARGS is a list of string arguments forwarded to rclone."
              (unless destination-file
                (message "Couldn't get remote path for \"%s\"" expanded-file)
                (throw 'continue nil))
-             (concat (format "rclone copy %s %s"
+             (concat (format "rclone copy \"%s\" \"%s\""
                              expanded-file
                              destination-file)
                      (and args " ")
