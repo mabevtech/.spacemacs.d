@@ -5,6 +5,7 @@
 (require 'core-keybindings)
 (require 'subr-x)
 (require 'helm)
+(require 'dash)
 (require 'evil-jumps)
 
 (with-eval-after-load 'helm-regexp
@@ -60,6 +61,41 @@ Advice :around FUN with ARGS."
 
 (advice-add #'helm-find-files-persistent-action-if :around
             #'mabo3n/helm-ff-always-expand-symlink-dirs)
+
+;; Define shortcuts for parameters in helm-ag queries
+;; e.g. "Users -Grepo" -> "Users --iglob=**/*repo*/**"
+
+(defconst mabo3n/helm-ag-query-options-transformations-alist
+  '(("^-G\\(\\S-+\\)" . "--iglob=**/*\\1*/**"))
+  "Helm-ag query options transformations.
+
+Each entry has form (REGEXP . REPLACEMENT).")
+
+(defun mabo3n/helm-ag-transform-query-options (&rest args)
+  "Advice to transform options of `helm-ag--parse-options-and-query' (ARGS).
+
+Map each (parsed) option with all matched transformations defined in
+`mabo3n/helm-ag-query-options-transformations-alist'."
+  (-let* (((options . query) (apply args))
+          (case-fold-search nil)
+          (options
+           (--map
+            (let ((transformed
+                   (reduce
+                    (lambda (opt transformation)
+                      (replace-regexp-in-string (car transformation)
+                                                (cdr transformation)
+                                                opt
+                                                nil))
+                    mabo3n/helm-ag-query-options-transformations-alist
+                    :initial-value it)))
+              (message "%s -> %s" it transformed)
+              transformed)
+            options)))
+    (cons options query)))
+
+(advice-add #'helm-ag--parse-options-and-query :around
+            #'mabo3n/helm-ag-transform-query-options)
 
 (provide 'init-helm)
 ;;; init-helm.el ends here
