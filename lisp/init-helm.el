@@ -4,6 +4,7 @@
 
 (require 'core-keybindings)
 (require 'subr-x)
+(require 'init-utils)
 (require 'helm)
 (require 'dash)
 (require 'evil-jumps)

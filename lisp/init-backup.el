@@ -7,6 +7,7 @@
 ;; (require 'simple)
 ;; (require 'core-load-paths)
 ;; (require 'core-dotspacemacs)
+;; (require 'init-utils)
 ;; (require 'helm)
 
 (defconst mabo3n/backup-files-remote-root "d:"
