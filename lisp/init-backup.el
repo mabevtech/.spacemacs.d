@@ -45,13 +45,8 @@ Note that no sanitization/validation against paths are performed."
                                              user-home-directory))))
              (dirp (file-directory-p expanded-file))
              (transformed-path
-              (reduce (lambda (path transformation-entry)
-                        (replace-regexp-in-string (car transformation-entry)
-                                                  (cdr transformation-entry)
-                                                  path
-                                                  t))
-                      mabo3n/backup-files-path-transformations
-                      :initial-value relative-file-path))
+              (mabo3n/transform-strings mabo3n/backup-files-path-transformations
+                                        relative-file-path))
              (transformed-path-last-directory
               (if dirp
                   ;; **/foo/dir -> **/foo/dir/
