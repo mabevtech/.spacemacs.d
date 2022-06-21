@@ -150,7 +150,7 @@ string (if any)."
                              (replace-regexp-in-string (car transformation)
                                                        (cdr transformation)
                                                        cur
-                                                       nil))
+                                                       t))
                            transformations
                            :initial-value str)))
               (and msg
