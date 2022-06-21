@@ -124,7 +124,7 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
 (define-key process-menu-mode-map (kbd "x") 'mabo3n/process-menu-delete-process)
 (define-key process-menu-mode-map (kbd "d") 'mabo3n/process-menu-delete-process)
 
-;; I don't use `suspend-frame' and ocasionally press this by mistake
+;; I don't use `suspend-frame' and occasionally press this by mistake
 (global-set-key (kbd "C-x C-z") #'ignore)
 
 (provide 'init-emacs)
