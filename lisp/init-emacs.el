@@ -127,5 +127,37 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
 ;; I don't use `suspend-frame' and occasionally press this by mistake
 (global-set-key (kbd "C-x C-z") #'ignore)
 
+(defun mabo3n/transform-strings
+    (transformations strings &optional ignore-case msg)
+  "Sequentially apply TRANSFORMATIONS in STRINGS.
+
+STRINGS is a list of strings, and TRANSFORMATIONS is an
+association list with (REGEXP . REPLACEMENT) entries.
+
+For each string in STRINGS, replace text matching each REGEXP with
+the respective REPLACEMENT.
+
+Replacements are performed with `replace-regexp-in-strings'.
+The value of IGNORE-CASE is set to variable `case-fold-search' before
+each replacement.
+
+If MSG is non-nil, display a message indicating each transformed
+string (if any)."
+  (--map
+   (let* ((case-fold-search ignore-case)
+          (transformed
+           (reduce (lambda (str transformation)
+                     (replace-regexp-in-string (car transformation)
+                                               (cdr transformation)
+                                               str
+                                               nil))
+                   transformations
+                   :initial-value it)))
+     (and msg
+          (not (string-equal it transformed))
+          (message "%s -> %s" it transformed))
+     transformed)
+   strings))
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
