@@ -2,6 +2,8 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'cl-lib)
+
 (defun mabo3n/transform-strings (transformations strings &optional ignore-case msg)
   "Sequentially apply TRANSFORMATIONS in STRINGS.
 
@@ -21,13 +23,13 @@ string (if any)."
          (transform-function
           (lambda (str)
             (let ((transformed
-                   (reduce (lambda (cur transformation)
-                             (replace-regexp-in-string (car transformation)
-                                                       (cdr transformation)
-                                                       cur
-                                                       t))
-                           transformations
-                           :initial-value str)))
+                   (cl-reduce (lambda (cur transformation)
+                                (replace-regexp-in-string (car transformation)
+                                                          (cdr transformation)
+                                                          cur
+                                                          t))
+                              transformations
+                              :initial-value str)))
               (and msg
                    (not (string-equal str transformed))
                    (message "%s -> %s" str transformed))
