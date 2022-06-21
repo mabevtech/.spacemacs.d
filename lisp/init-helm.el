@@ -65,7 +65,7 @@ Advice :around FUN with ARGS."
 ;; Define shortcuts for parameters in helm-ag queries
 ;; e.g. "Users -Grepo" -> "Users --iglob=**/*repo*/**"
 
-(defconst mabo3n/helm-ag-query-options-transformations-alist
+(defconst mabo3n/helm-ag-query-options-transformations
   '(("^-G\\(\\S-+\\)" . "--iglob=**/*\\1*/**"))
   "Helm-ag query options transformations.
 
@@ -75,23 +75,11 @@ Each entry has form (REGEXP . REPLACEMENT).")
   "Advice to transform options of `helm-ag--parse-options-and-query' (ARGS).
 
 Map each (parsed) option with all matched transformations defined in
-`mabo3n/helm-ag-query-options-transformations-alist'."
+`mabo3n/helm-ag-query-options-transformations'."
   (-let* (((options . query) (apply args))
-          (case-fold-search nil)
-          (options
-           (--map
-            (let ((transformed
-                   (reduce
-                    (lambda (opt transformation)
-                      (replace-regexp-in-string (car transformation)
-                                                (cdr transformation)
-                                                opt
-                                                nil))
-                    mabo3n/helm-ag-query-options-transformations-alist
-                    :initial-value it)))
-              (message "%s -> %s" it transformed)
-              transformed)
-            options)))
+          (options (mabo3n/transform-strings
+                    mabo3n/helm-ag-query-options-transformations
+                    options nil t)))
     (cons options query)))
 
 (advice-add #'helm-ag--parse-options-and-query :around
