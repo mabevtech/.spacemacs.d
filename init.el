@@ -16,7 +16,8 @@ This function should only modify configuration layer settings."
      osx
      helm
      (org :variables
-          org-enable-github-support t)
+          org-enable-github-support t
+          org-enable-roam-support t)
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom

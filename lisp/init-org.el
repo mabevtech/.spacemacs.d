@@ -253,6 +253,20 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (add-hook 'org-capture-mode-hook 'evil-insert-state 1)
 (add-hook 'org-log-buffer-setup-hook #'evil-insert-state)
 
+
+;; org-roam
+
+(with-eval-after-load 'org-roam
+  (setq org-roam-directory (expand-file-name "~/org/roam/"))
+  (global-set-key (kbd "C-c n l") #'org-roam-buffer-toggle)
+  (global-set-key (kbd "C-c n f") #'org-roam-node-find)
+  (global-set-key (kbd "C-c n g") #'org-roam-graph)
+  (global-set-key (kbd "C-c n c") #'org-roam-capture)
+  (global-set-key (kbd "C-c n a") #'org-roam-alias-add)
+  (global-set-key (kbd "C-c n A") #'org-roam-alias-remove)
+  (global-set-key (kbd "C-c n t") #'org-roam-tag-add)
+  (global-set-key (kbd "C-c n T") #'org-roam-tag-remove))
+
 ;;; misc
 
 (setq org-agenda-custom-commands
