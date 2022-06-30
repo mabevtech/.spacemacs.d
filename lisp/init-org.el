@@ -113,7 +113,7 @@ according to MATCH-SEQUENCE.
 See function `mabo3n/org-capture-dive-to-headline' for more details."
   (with-current-buffer (org-capture-target-buffer file)
      (mabo3n/org-capture-dive-to-headline match-sequence)
-     ;; apparently this doesn't word non-interactively
+     ;; apparently this doesn't work non-interactively
      ;; https://narkive.com/RtJ6Kjrt.1
      (call-interactively 'org-store-link))
   (with-temp-buffer
