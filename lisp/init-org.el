@@ -253,38 +253,21 @@ inside the `org-capture' buffer with `org-capture-refile')."
 (add-hook 'org-capture-mode-hook 'evil-insert-state 1)
 (add-hook 'org-log-buffer-setup-hook #'evil-insert-state)
 
-;;; misc
+;;; org-agenda
 
 (setq org-agenda-custom-commands
       '(("n" "Agenda and all TODOs"
          ((agenda #1="")
           (alltodo #1#)))))
 
-(defun mabo3n/show-trailing-whitespace ()
-  "Show trailing whitespace."
-  (setq show-trailing-whitespace t))
-(add-hook 'org-mode-hook #'mabo3n/show-trailing-whitespace)
-
-(setq-default org-cycle-separator-lines 2)
-(setq-default org-adapt-indentation t)
-(setq-default org-refile-targets '((nil :maxlevel . 1)))
-(setq-default org-refile-allow-creating-parent-nodes 'confirm)
-(setq-default org-log-into-drawer t)
-(setq-default org-id-link-to-org-use-id 'use-existing)
-(setq-default org-startup-folded 'show2levels)
-
-(setq-default org-default-notes-file (expand-file-name "notes" org-directory))
-(setq-default org-archive-location ".archive.%s::")
-(setq-default org-archive-file-header-format
-              (concat ";;; -*- mode: org; -*-\n"
-                      "Archived entries from file =%s=:\n"
-                      "\n"))
 (setq-default
  org-agenda-file-regexp
  (rx bos
      (or (seq (not (any ?.)) (0+ nonl) ".org")
          (seq (0+ nonl) (or "journal" "notes" "tasks")))
      eos))
+
+;;; org-pomodoro
 
 (with-eval-after-load 'org-pomodoro
   (setq-default org-pomodoro-time-format "%.2m")
@@ -295,6 +278,30 @@ inside the `org-capture' buffer with `org-capture-refile')."
     (setq-default org-pomodoro-format "P~%s"
                   org-pomodoro-short-break-format "B~%s"
                   org-pomodoro-long-break-format "L~%s")))
+
+;;; misc
+
+(defun mabo3n/show-trailing-whitespace ()
+  "Show trailing whitespace."
+  (setq show-trailing-whitespace t))
+(add-hook 'org-mode-hook #'mabo3n/show-trailing-whitespace)
+
+(setq-default
+ org-cycle-separator-lines 2
+ org-adapt-indentation t
+ org-refile-targets '((nil :maxlevel . 1))
+ org-refile-allow-creating-parent-nodes 'confirm
+ org-log-into-drawer t
+ org-id-link-to-org-use-id 'use-existing
+ org-startup-folded 'show2levels)
+
+(setq-default
+ org-default-notes-file (expand-file-name "notes" org-directory)
+ org-archive-location ".archive.%s::"
+ org-archive-file-header-format
+ (concat ";;; -*- mode: org; -*-\n"
+         "Archived entries from file =%s=:\n"
+         "\n"))
 
 (provide 'init-org)
 ;;; init-org.el ends here
