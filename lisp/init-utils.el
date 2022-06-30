@@ -4,6 +4,9 @@
 
 (require 'cl-lib)
 
+(defconst mabo3n/home-dir (expand-file-name "~/")
+  "User home directory (default ~/).")
+
 (defun mabo3n/transform-strings (transformations strings &optional ignore-case msg)
   "Sequentially apply TRANSFORMATIONS in STRINGS.
 
