@@ -311,7 +311,10 @@ inside the `org-capture' buffer with `org-capture-refile')."
          ((agenda #1="")
           (alltodo #1#)))))
 
-(add-hook 'org-mode-hook (lambda () (setq show-trailing-whitespace t)))
+(defun mabo3n/show-trailing-whitespace ()
+  "Show trailing whitespace."
+  (setq show-trailing-whitespace t))
+(add-hook 'org-mode-hook #'mabo3n/show-trailing-whitespace)
 
 (setq-default org-cycle-separator-lines 2)
 (setq-default org-adapt-indentation t)
