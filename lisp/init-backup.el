@@ -2,12 +2,12 @@
 ;;; Commentary:
 ;;; Code:
 
+(require 'init-utils)
 ;; (require 'subr-x)
 ;; (require 'dash)
 ;; (require 'simple)
 ;; (require 'core-load-paths)
 ;; (require 'core-dotspacemacs)
-;; (require 'init-utils)
 ;; (require 'helm)
 
 (defconst mabo3n/backup-files-remote-root "d:"
@@ -34,16 +34,16 @@ and REPLACEMENT the replacement string to substitute REGEXP.")
 
 Apply each of `mabo3n/backup-files-path-transformations' on FILE,
 and return its remote destination, which basically is \"the path
-to the last directory on FILE, relative to `user-home-directory',
+to the last directory on FILE, relative to `mabo3n/home-dir',
 prepended by `mabo3n/backup-files-remote-root'\".
 
 Note that no sanitization/validation against paths are performed."
   (let ((expanded-file (expand-file-name file)))
-    (when (string-prefix-p user-home-directory expanded-file)
+    (when (string-prefix-p mabo3n/home-dir expanded-file)
       (let* ((relative-file-path
               (string-trim-left expanded-file
                                 (concat "^" (file-name-as-directory
-                                             user-home-directory))))
+                                             mabo3n/home-dir))))
              (dirp (file-directory-p expanded-file))
              (transformed-path
               (mabo3n/transform-strings mabo3n/backup-files-path-transformations
@@ -72,11 +72,11 @@ ARGS is a list of string arguments forwarded to rclone."
                      (throw 'continue nil)))
                   (destination-file
                    (cond
-                    ((not (string-prefix-p user-home-directory expanded-file))
+                    ((not (string-prefix-p mabo3n/home-dir expanded-file))
                      (message "Cannot backup file from outside user home directory \"%s\"."
                               expanded-file)
                      (throw 'continue nil))
-                    ((string= user-home-directory expanded-file)
+                    ((string= mabo3n/home-dir expanded-file)
                      (message "Cannot backup the whole user home directory \"%s\"."
                               expanded-file)
                      (throw 'continue nil))
@@ -129,7 +129,7 @@ ARGS is a list of args. If nil, defaults to
 When called interactively, prompts for a file and use default ARGS.
 With a `\\[universal-argument]', also prompts for an argument string.
 
-Backing up files outside of, or the whole `user-home-directory',
+Backing up files outside of, or the whole `mabo3n/home-dir',
 is not allowed (they are ignored).
 
 See URL `https://rclone.org/commands/rclone_copy/' for more info
@@ -170,7 +170,7 @@ Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
   (mabo3n/backup-recent-files
    (mapcar (apply-partially 'concat (file-name-as-directory
-                                     user-home-directory))
+                                     mabo3n/home-dir))
            '(".gitconfig"
              ".bashrc" ".bash_profile" ".bash_aliases"
              ".config/" ".vimrc"))
@@ -182,7 +182,7 @@ Uses `mabo3n/backup-recent-files' with ARGS."
 Uses `mabo3n/backup-recent-files' with ARGS."
   (interactive)
   (mabo3n/backup-file
-   `(,(expand-file-name "org/" user-home-directory)) args))
+   `(,(expand-file-name "org/" mabo3n/home-dir)) args))
 
 (defconst mabo3n/backup-dotspacemacs-default-commit-message
   "<auto commit>"
