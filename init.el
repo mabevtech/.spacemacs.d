@@ -234,6 +234,7 @@ before packages are loaded."
            init-helm
            init-visuals
            init-org
+           init-org-roam
            init-yas
            init-backup
            init-google
