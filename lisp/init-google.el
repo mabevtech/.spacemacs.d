@@ -6,8 +6,8 @@
 
 ;;; Code:
 
-;; (require 'helm)
-;; (require 'helm-net)
+(require 'helm)
+(require 'helm-net)
 ;; (require 'thingatpt)
 ;; (require 'google-translate-default-ui)
 ;; (require 'core-keybindings)
@@ -18,6 +18,7 @@
   "Search TKK."
   (list 430675 2721866130))
 
+;;;###autoload
 (defun mabo3n/helm-google-suggest (&optional input)
   (interactive)
   (let ((input (or (and (use-region-p)
@@ -30,18 +31,21 @@
           :input input
           :delayed t)))
 
+;;;###autoload
 (defun mabo3n/helm-google-suggest-at-point ()
   (interactive)
   (let ((input (word-at-point t)))
     (unless input (message "Nothing at point."))
     (mabo3n/helm-google-suggest input)))
 
+;;;###autoload
 (defun mabo3n/google-translate-query-translate (&rest args)
   (interactive)
   (if (use-region-p)
       (apply #'google-translate-at-point args)
     (apply #'google-translate-query-translate args)))
 
+;;;###autoload
 (defun mabo3n/google-translate-query-translate-reverse (&rest args)
   (interactive)
   (if (use-region-p)
@@ -63,7 +67,8 @@
 (spacemacs/declare-prefix "s g" "Google")
 (spacemacs/declare-prefix "s g t" "translate")
 
-(setq google-translate-pop-up-buffer-set-focus t)
+(with-eval-after-load 'google-translate-core-ui
+  (setq-default google-translate-pop-up-buffer-set-focus t))
 
 (provide 'init-google)
 ;;; init-google.el ends here
