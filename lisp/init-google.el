@@ -1,9 +1,5 @@
-;;; init-google.el --- Better usage of google suggest/translate -*- lexical-binding: t -*-
-
+;;; init-google.el --- Config for google related features -*- lexical-binding: t -*-
 ;;; Commentary:
-
-;; Make google suggest/translate follow Spacemacs conventions better (IMO).
-
 ;;; Code:
 
 (require 'helm)
@@ -12,11 +8,22 @@
 ;; (require 'google-translate-default-ui)
 ;; (require 'core-keybindings)
 
-;; Workaround to fix google-translate-at-point
-;; https://github.com/atykhonov/google-translate/issues/52#issuecomment-470756933
-(defun google-translate--search-tkk ()
-  "Search TKK."
-  (list 430675 2721866130))
+(spacemacs/set-leader-keys
+  "s G" (key-binding (kbd "SPC s g")) ;; bind +grep search to capital g
+  "s g" nil                           ;; unbind +grep stuff from small g
+  "s g g" #'mabo3n/helm-google-suggest
+  "s g G" #'mabo3n/helm-google-suggest-at-point
+  "s g t" (key-binding (kbd "SPC x g"))
+  "s g t t" #'mabo3n/google-translate-query-translate
+  "s g t T" #'google-translate-at-point
+  "s g t v" #'mabo3n/google-translate-query-translate-reverse
+  "s g t V" #'google-translate-at-point-reverse)
+
+(spacemacs/declare-prefix "s G" "grep")
+(spacemacs/declare-prefix "s g" "Google")
+(spacemacs/declare-prefix "s g t" "translate")
+
+;;; google suggest
 
 ;;;###autoload
 (defun mabo3n/helm-google-suggest (&optional input)
@@ -38,6 +45,14 @@
     (unless input (message "Nothing at point."))
     (mabo3n/helm-google-suggest input)))
 
+;;; google translate
+
+;; Workaround to fix google-translate-at-point
+;; https://github.com/atykhonov/google-translate/issues/52#issuecomment-470756933
+(defun google-translate--search-tkk ()
+  "Search TKK."
+  (list 430675 2721866130))
+
 ;;;###autoload
 (defun mabo3n/google-translate-query-translate (&rest args)
   (interactive)
@@ -51,21 +66,6 @@
   (if (use-region-p)
       (apply #'google-translate-at-point-reverse args)
     (apply #'google-translate-query-translate-reverse args)))
-
-(spacemacs/set-leader-keys
-  "s G" (key-binding (kbd "SPC s g")) ;; bind +grep search to capital g
-  "s g" nil                           ;; unbind +grep stuff from small g
-  "s g g" #'mabo3n/helm-google-suggest
-  "s g G" #'mabo3n/helm-google-suggest-at-point
-  "s g t" (key-binding (kbd "SPC x g"))
-  "s g t t" #'mabo3n/google-translate-query-translate
-  "s g t T" #'google-translate-at-point
-  "s g t v" #'mabo3n/google-translate-query-translate-reverse
-  "s g t V" #'google-translate-at-point-reverse)
-
-(spacemacs/declare-prefix "s G" "grep")
-(spacemacs/declare-prefix "s g" "Google")
-(spacemacs/declare-prefix "s g t" "translate")
 
 (with-eval-after-load 'google-translate-core-ui
   (setq-default google-translate-pop-up-buffer-set-focus t))
