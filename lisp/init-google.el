@@ -29,7 +29,7 @@
                          (buffer-substring-no-properties (region-beginning) (region-end)))
                     input))
          ;; This prevents some character repetition while typing
-         (helm-input-idle-delay 0.4))
+         (helm-input-idle-delay 0.2))
      (require 'helm-net)
      (helm :sources 'helm-source-google-suggest
            :buffer "*helm google*"
