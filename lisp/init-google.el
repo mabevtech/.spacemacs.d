@@ -2,10 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'helm)
-(require 'helm-net)
 ;; (require 'thingatpt)
-;; (require 'google-translate-default-ui)
 ;; (require 'core-keybindings)
 
 (spacemacs/set-leader-keys
@@ -25,25 +22,25 @@
 
 ;;; google suggest
 
-;;;###autoload
-(defun mabo3n/helm-google-suggest (&optional input)
-  (interactive)
-  (let ((input (or (and (use-region-p)
-                        (buffer-substring-no-properties (region-beginning) (region-end)))
-                   input))
-        ;; This prevents some character repetition while typing
-        (helm-input-idle-delay 0.4))
-    (helm :sources 'helm-source-google-suggest
-          :buffer "*helm google*"
-          :input input
-          :delayed t)))
+(with-eval-after-load 'helm
+ (defun mabo3n/helm-google-suggest (&optional input)
+   (interactive)
+   (let ((input (or (and (use-region-p)
+                         (buffer-substring-no-properties (region-beginning) (region-end)))
+                    input))
+         ;; This prevents some character repetition while typing
+         (helm-input-idle-delay 0.4))
+     (require 'helm-net)
+     (helm :sources 'helm-source-google-suggest
+           :buffer "*helm google*"
+           :input input
+           :delayed t)))
 
-;;;###autoload
-(defun mabo3n/helm-google-suggest-at-point ()
-  (interactive)
-  (let ((input (word-at-point t)))
-    (unless input (message "Nothing at point."))
-    (mabo3n/helm-google-suggest input)))
+ (defun mabo3n/helm-google-suggest-at-point ()
+   (interactive)
+   (let ((input (word-at-point t)))
+     (unless input (message "Nothing at point."))
+     (mabo3n/helm-google-suggest input))))
 
 ;;; google translate
 
@@ -53,14 +50,12 @@
   "Search TKK."
   (list 430675 2721866130))
 
-;;;###autoload
 (defun mabo3n/google-translate-query-translate (&rest args)
   (interactive)
   (if (use-region-p)
       (apply #'google-translate-at-point args)
     (apply #'google-translate-query-translate args)))
 
-;;;###autoload
 (defun mabo3n/google-translate-query-translate-reverse (&rest args)
   (interactive)
   (if (use-region-p)
