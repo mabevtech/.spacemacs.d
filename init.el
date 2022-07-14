@@ -232,6 +232,7 @@ before packages are loaded."
            init-frames
            init-evil
            init-helm
+           init-git
            init-visuals
            init-org
            init-org-roam
@@ -276,9 +277,6 @@ before packages are loaded."
     ;; but dismiss them right after (just a quick peek)
     flycheck-pos-tip-timeout 3
     )
-
-  ;; Open COMMIT_EDITMSG buffer already in insert state
-  (add-hook #'git-commit-mode-hook 'evil-insert-state)
 
   ;; Do not wait that much the next avy timer char
   (setq-default avy-timeout-seconds 0.2)
