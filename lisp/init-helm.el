@@ -9,6 +9,9 @@
 (require 'dash)
 (require 'evil-jumps)
 
+(define-key helm-map (kbd "C-S-n") #'helm-next-source)
+(define-key helm-map (kbd "C-S-p") #'helm-previous-source)
+
 (with-eval-after-load 'helm-regexp
   (spacemacs/set-leader-keys "x r h" #'helm-regexp))
 
