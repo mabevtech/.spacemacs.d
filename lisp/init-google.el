@@ -6,11 +6,11 @@
 ;; (require 'core-keybindings)
 
 (spacemacs/set-leader-keys
-  "s G" (key-binding (kbd "SPC s g")) ;; bind +grep search to capital g
-  "s g" nil                           ;; unbind +grep stuff from small g
-  "s g g" #'mabo3n/helm-google-suggest
-  "s g G" #'mabo3n/helm-google-suggest-at-point
-  "s g t" (key-binding (kbd "SPC x g"))
+  "s G"     (key-binding (kbd "SPC s g")) ;; bind +grep search to capital g
+  "s g"     nil                           ;; unbind +grep stuff from small g
+  "s g g"   #'mabo3n/helm-google-suggest
+  "s g G"   #'mabo3n/helm-google-suggest-at-point
+  "s g t"   (key-binding (kbd "SPC x g"))
   "s g t t" #'mabo3n/google-translate-query-translate
   "s g t T" #'google-translate-at-point
   "s g t v" #'mabo3n/google-translate-query-translate-reverse
