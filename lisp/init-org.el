@@ -286,6 +286,47 @@ inside the `org-capture' buffer with `org-capture-refile')."
   (setq show-trailing-whitespace t))
 (add-hook 'org-mode-hook #'mabo3n/show-trailing-whitespace)
 
+;; Make `org-insert-link' smart when inserting URLs
+;; From https://xenodium.com/emacs-dwim-do-what-i-mean/
+
+(defvar org-link-any-re)
+(defvar org-mode-map)
+
+(defun mabo3n/org-insert-link-dwim ()
+  "Like `org-insert-link' but with personal dwim preferences.
+
+If an http URL is on top of kill ring, bypass the prompt for a link
+and use the retrieved page title as default description.
+If also the region is active, use that as description and replace
+the region with the link, not prompting for anything.
+
+Fallback to `org-insert-link' otherwise."
+  (interactive)
+  (let* ((point-in-link (org-in-regexp org-link-any-re 1))
+         (clipboard-url (when (string-match-p "^http" (current-kill 0))
+                          (current-kill 0)))
+         (region-content (when (region-active-p)
+                           (buffer-substring-no-properties (region-beginning)
+                                                           (region-end)))))
+    (cond ((and region-content clipboard-url (not point-in-link))
+           (delete-region (region-beginning) (region-end))
+           (insert (org-make-link-string clipboard-url region-content)))
+          ((and clipboard-url (not point-in-link))
+           (insert (org-make-link-string
+                    clipboard-url
+                    (read-string "Description: "
+                                 (with-current-buffer (url-retrieve-synchronously clipboard-url)
+                                   (dom-text (car
+                                              (dom-by-tag (libxml-parse-html-region
+                                                           (point-min)
+                                                           (point-max))
+                                                          'title))))))))
+          (t
+           (call-interactively 'org-insert-link)))))
+
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "C-c C-l") #'mabo3n/org-insert-link-dwim))
+
 (setq-default
  org-cycle-separator-lines 2
  org-adapt-indentation t
