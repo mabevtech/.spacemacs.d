@@ -293,7 +293,8 @@ inside the `org-capture' buffer with `org-capture-refile')."
  org-refile-allow-creating-parent-nodes 'confirm
  org-log-into-drawer t
  org-id-link-to-org-use-id 'use-existing
- org-startup-folded 'show2levels)
+ org-startup-folded 'show2levels
+ org-hide-emphasis-markers t)
 
 (setq-default
  org-default-notes-file (expand-file-name "notes" org-directory)
