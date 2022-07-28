@@ -2,8 +2,6 @@
 ;;; Commentary:
 ;;; Code:
 
-(require 'org)
-
 (with-eval-after-load 'org-roam
   (global-set-key (kbd "C-c n l") #'org-roam-buffer-toggle)
   (global-set-key (kbd "C-c n f") #'org-roam-node-find)
