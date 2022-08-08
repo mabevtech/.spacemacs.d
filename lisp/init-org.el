@@ -281,25 +281,27 @@ inside the `org-capture' buffer with `org-capture-refile')."
                   org-pomodoro-short-break-format "B~%s"
                   org-pomodoro-long-break-format "L~%s")))
 
-;;; org-cite + citar
+;;; org-cite
 
-;; (let ((bib (list (expand-file-name "docs/My Library.bib" mabo3n/home-dir))))
-;;   (setq org-cite-global-bibliography bib
-;;         org-cite-insert-processor   'citar
-;;         org-cite-follow-processor   'citar
-;;         org-cite-activate-processor 'citar
-;;         citar-bibliography bib))
+(defvar org-cite-global-bibliography)
 
-;; (with-eval-after-load 'all-the-icons
-;;   (let ((file-icon
-;;          (all-the-icons-faicon "file-o" :face 'all-the-icons-green :v-adjust -0.1))
-;;         (note-icon
-;;          (all-the-icons-material "speaker_notes" :face 'all-the-icons-blue :v-adjust -0.3))
-;;         (link-icon (all-the-icons-octicon "link" :face 'all-the-icons-orange :v-adjust 0.01)))
-;;     (setq citar-symbols `((file ,file-icon . " ")
-;;                           (note ,note-icon . " ")
-;;                           (link ,link-icon . " "))
-;;           citar-symbol-separator "  ")))
+(let ((bib (list (expand-file-name "docs/My Library.bib" mabo3n/home-dir))))
+  (setq org-cite-global-bibliography bib
+        ;; org-cite-insert-processor   'citar
+        ;; org-cite-follow-processor   'citar
+        ;; org-cite-activate-processor 'citar
+        ;; citar-bibliography bib
+        ))
+
+;; (setq org-link-parameters
+;;       (delq (assoc "cite" org-link-parameters) org-link-parameters))
+;; (push (list "cite"
+;;             :complete (lambda ()
+;;                         (with-temp-buffer
+;;                           (mabo3n/helm-bibtex-insert)
+;;                           (buffer-substring-no-properties (point-min) (point-max)))))
+;;       org-link-parameters)
+
 
 ;;; misc
 
