@@ -178,6 +178,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
       '(("t" "Task" entry
          (function mabo3n/org-capture-tasks-find-location-function)
          "* TODO %?
+  SCHEDULED: %t
   %U
   %a"
          :clock-resume t :kill-buffer t)
@@ -186,6 +187,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
          (function (lambda ()
                      (mabo3n/org-capture-tasks-find-location-function t)))
          "* TODO %?
+  SCHEDULED: %t
   %U
   %a"
          :clock-resume t :kill-buffer t)
