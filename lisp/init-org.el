@@ -306,6 +306,10 @@ inside the `org-capture' buffer with `org-capture-refile')."
   (setq show-trailing-whitespace t))
 (add-hook 'org-mode-hook #'mabo3n/show-trailing-whitespace)
 
+;; Bind `mabo3n/helm-bibtex-insert'
+(with-eval-after-load 'init-helm-bibtex
+  (define-key org-mode-map (kbd "C-c C-'") #'mabo3n/helm-bibtex-insert))
+
 ;; Make `org-insert-link' smart when inserting URLs
 ;; From https://xenodium.com/emacs-dwim-do-what-i-mean/
 
