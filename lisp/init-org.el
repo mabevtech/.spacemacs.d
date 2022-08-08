@@ -305,6 +305,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 ;;; misc
 
+;; Always show whitespace in org-mode
 (defun mabo3n/show-trailing-whitespace ()
   "Show trailing whitespace."
   (setq show-trailing-whitespace t))
