@@ -127,5 +127,7 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
 ;; I don't use `suspend-frame' and occasionally press this by mistake
 (global-set-key (kbd "C-x C-z") #'ignore)
 
+(setq native-comp-async-report-warnings-errors nil)
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
