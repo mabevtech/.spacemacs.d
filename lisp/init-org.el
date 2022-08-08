@@ -8,6 +8,8 @@
 ;; (require 'org-agenda)
 ;; (require 'helm-mode)
 
+(defvar org-mode-map)
+
 ;;; org-capture
 
 (defun mabo3n/org-capture-find-file-function (file)
@@ -348,8 +350,7 @@ Fallback to `org-insert-link' otherwise."
           (t
            (call-interactively 'org-insert-link)))))
 
-(with-eval-after-load 'org
-  (define-key org-mode-map (kbd "C-c C-l") #'mabo3n/org-insert-link-dwim))
+(define-key org-mode-map (kbd "C-c C-l") #'mabo3n/org-insert-link-dwim)
 
 (setq-default
  org-cycle-separator-lines 2
