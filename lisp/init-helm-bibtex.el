@@ -55,6 +55,7 @@
 
 Forward ARG, LOCAL-BIB and INPUT to wrapped function."
   (interactive "P")
+  (require 'helm-bibtex)
   (let ((helm-source-bibtex mabo3n/helm-source-bibtex-insert))
     (helm-bibtex arg local-bib input)))
 
