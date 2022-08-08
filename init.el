@@ -53,7 +53,6 @@ This function should only modify configuration layer settings."
      chrome
 
      emacs-lisp
-     scheme
 
      ;; Requires omnisharp-emacs which requires mono
      ;; see https://github.com/OmniSharp/omnisharp-emacs
