@@ -128,8 +128,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-themes '(doom-nord-light doom-moonlight)
    dotspacemacs-mode-line-theme 'doom
    dotspacemacs-colorize-cursor-according-to-state t
-   dotspacemacs-default-font '("Meslo LG S DZ for Powerline"
-                               :size 19
+   dotspacemacs-default-font '("Roboto Mono"
+                               :size 18
                                :weight normal
                                :width normal
                                :powerline-scale 1.3)
