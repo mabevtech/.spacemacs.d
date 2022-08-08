@@ -13,7 +13,6 @@ This function should only modify configuration layer settings."
 
    dotspacemacs-configuration-layers
    '(
-     osx
      helm
      (org :variables
           org-enable-github-support t
