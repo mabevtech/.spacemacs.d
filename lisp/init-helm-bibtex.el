@@ -10,7 +10,8 @@
 (with-eval-after-load 'helm-bibtex
   (setq helm-bibtex-full-frame nil)
   (setq bibtex-completion-bibliography
-        (expand-file-name "docs/My Library.bib" mabo3n/home-dir)))
+        (concat "/mnt/c/Users/marcel.bornancin/OneDrive - Anheuser-Busch InBev/"
+                "My Documents/My Library.bib")))
 
 ;; Make `helm-bibtex' insert citations with org-cite syntax (in org files)
 
