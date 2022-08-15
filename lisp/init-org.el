@@ -363,7 +363,8 @@ Fallback to `org-insert-link' otherwise."
  org-log-into-drawer t
  org-id-link-to-org-use-id 'use-existing
  org-startup-folded 'show2levels
- org-hide-emphasis-markers t)
+ org-hide-emphasis-markers t
+ org-image-actual-width nil)
 
 (setq-default
  org-default-notes-file (expand-file-name "notes" org-directory)
