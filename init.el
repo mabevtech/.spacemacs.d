@@ -105,6 +105,15 @@ This function should only modify configuration layer settings."
 This function is called at the very beginning of Spacemacs startup,
 before layer configuration.
 It should only modify the values of Spacemacs settings."
+
+  (defvar mabo3n/wsl
+    (and (eq system-type 'gnu/linux)
+         (getenv "WSLENV"))
+    "Non-nil if emacs is running in WSL.")
+  (defvar mabo3n/macos
+    (eq system-type 'darwin)
+    "Non-nil if emacs is running in MacOS.")
+
   (setq-default
    dotspacemacs-distribution 'spacemacs
    dotspacemacs-enable-emacs-pdumper nil
