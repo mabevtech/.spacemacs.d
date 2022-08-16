@@ -37,11 +37,11 @@ If FRAME is omitted or nil, use currently selected frame."
            (frame-w (frame-pixel-width frame))
            (frame-h (frame-pixel-height frame))
            ;; frame-monitor-workarea returns (x y width height) for the monitor
-           ;; (monitor-w (nth 2 (frame-monitor-workarea frame)))
-           ;; (monitor-h (nth 3 (frame-monitor-workarea frame)))
-           ;; HACK Ignore extra displays
-           (monitor-w 1920)
-           (monitor-h 1080)
+           ;;             HACK Ignore extra displays in my work (WSL) setup
+           (monitor-w (if mabo3n/wsl 1920
+                        (nth 2 (frame-monitor-workarea frame))))
+           (monitor-h (if mabo3n/wsl 1080
+                        (nth 3 (frame-monitor-workarea frame))))
            (center (list (/ (- monitor-w frame-w) 2)
                          (/ (- monitor-h frame-h) 2))))
       (apply 'set-frame-position `(,frame ,@center)))))
