@@ -2,6 +2,15 @@
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
+(defvar mabo3n/wsl
+  (and (eq system-type 'gnu/linux)
+       (getenv "WSLENV"))
+  "Non-nil if Emacs is running in WSL.")
+
+(defvar mabo3n/macos
+  (eq system-type 'darwin)
+  "Non-nil if Emacs is running in MacOS.")
+
 (defun dotspacemacs/layers ()
   "Layer configuration:
 This function should only modify configuration layer settings."
@@ -106,14 +115,6 @@ This function should only modify configuration layer settings."
 This function is called at the very beginning of Spacemacs startup,
 before layer configuration.
 It should only modify the values of Spacemacs settings."
-
-  (defvar mabo3n/wsl
-    (and (eq system-type 'gnu/linux)
-         (getenv "WSLENV"))
-    "Non-nil if emacs is running in WSL.")
-  (defvar mabo3n/macos
-    (eq system-type 'darwin)
-    "Non-nil if emacs is running in MacOS.")
 
   (setq-default
    dotspacemacs-distribution 'spacemacs
@@ -365,6 +366,17 @@ before packages are loaded."
     "C-q" (key-binding (kbd "SPC q"))
     "q" nil)
   (spacemacs/declare-prefix "C-q" "Quit")
+
+  ;; Teach Emacs how to open links in your default Windows browser
+  ;; https://emacsredux.com/blog/2021/12/19/wsl-specific-emacs-configuration/
+  ;; (when mabo3n/wsl
+  ;;   (let ((cmd-exe "/mnt/c/Windows/System32/cmd.exe")
+  ;;         (cmd-args '("/c" "start")))
+  ;;     (when (file-exists-p cmd-exe)
+  ;;       (setq browse-url-generic-program  cmd-exe
+  ;;             browse-url-generic-args     cmd-args
+  ;;             browse-url-browser-function 'browse-url-generic
+  ;;             search-web-default-browser 'browse-url-generic))))
 
   (evil-define-key (list 'insert 'hybrid) markdown-mode-map (kbd "<tab>") #'hippie-expand)
   (evil-define-key (list 'insert 'hybrid) restclient-mode-map (kbd "<tab>") #'hippie-expand)
