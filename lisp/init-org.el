@@ -287,8 +287,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
 (defvar org-cite-global-bibliography)
 
-(let ((bib (list (concat "/mnt/c/Users/marcel.bornancin/OneDrive - Anheuser-Busch InBev/"
-                         "My Documents/My Library.bib"))))
+(let ((bib (list (expand-file-name "docs/My Library.bib" mabo3n/home-dir))))
   (setq org-cite-global-bibliography bib
         ;; org-cite-insert-processor   'citar
         ;; org-cite-follow-processor   'citar
