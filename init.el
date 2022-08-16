@@ -12,7 +12,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
 
    dotspacemacs-configuration-layers
-   '(
+   `(
+     ,@(when mabo3n/macos 'osx)
      helm
      (org :variables
           org-enable-github-support t
