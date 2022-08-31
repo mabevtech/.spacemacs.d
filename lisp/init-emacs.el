@@ -130,5 +130,8 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
 (unless (version< emacs-version "28.1")
   (setq native-comp-async-report-warnings-errors nil))
 
+;; Human-readable file sizes in dired
+(setq dired-listing-switches "-ahl")
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
