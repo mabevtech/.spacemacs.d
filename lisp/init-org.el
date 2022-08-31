@@ -364,6 +364,7 @@ Fallback to `org-insert-link' otherwise."
  org-log-into-drawer t
  org-id-link-to-org-use-id 'use-existing
  org-startup-folded 'show2levels
+ org-hide-block-startup t
  org-hide-emphasis-markers t
  org-image-actual-width nil)
 
