@@ -133,5 +133,8 @@ just fine. See URL `https://emacs.stackexchange.com/a/51190'."
 ;; Human-readable file sizes in dired
 (setq dired-listing-switches "-ahl")
 
+;; Stop the annoying .#files
+(setq create-lockfiles nil)
+
 (provide 'init-emacs)
 ;;; init-emacs.el ends here
