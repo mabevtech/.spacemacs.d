@@ -64,10 +64,11 @@ This function should only modify configuration layer settings."
 
      emacs-lisp
 
-     ;; Requires omnisharp-emacs which requires mono
-     ;; see https://github.com/OmniSharp/omnisharp-emacs
-     ;; Requires msbuild for solutions (and a dotnet restore on project root)
-     csharp
+     ;; omnisharp backend requires mono, and it is obsolete:
+     ;; https://github.com/OmniSharp/omnisharp-emacs
+     ;; msbuild is required for dealing with solution files
+     (csharp :variables
+             csharp-backend 'lsp)
 
      (python :variables
              python-backend 'anaconda
