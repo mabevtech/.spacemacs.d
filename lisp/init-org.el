@@ -194,8 +194,7 @@ inside the `org-capture' buffer with `org-capture-refile')."
 
         ("j" "Journal entry" entry
          (file+olp+datetree "journal")
-         "* %U
-  %?"
+         "* %U %?"
          :tree-type week :kill-buffer t)
 
         ("n" "Note" entry
