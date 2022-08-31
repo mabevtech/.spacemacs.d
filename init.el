@@ -350,6 +350,10 @@ before packages are loaded."
                       which-key-replacement-alist nil nil #'equal)))
       (setcdr cell (symbol-name fun))))
 
+  (spacemacs/set-leader-keys
+    "p r" #'projectile-run-project
+    "p R" #'projectile-recentf)
+
   (evil-define-key (list 'insert 'hybrid 'normal) restclient-mode-map
     (kbd "<C-return>") 'restclient-http-send-current-stay-in-window)
 
