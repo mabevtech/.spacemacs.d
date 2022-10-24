@@ -24,7 +24,7 @@ When called interactively, prompts for WIDTH and HEIGHT."
     frame))
 
 ;; From `https://christiantietze.de/posts/2021/06/emacs-center-window-single-function/'
-(defun mabo3n/recenter-frame (&optional frame)
+(defun mabo3n/frame-recenter (&optional frame)
   "Center FRAME on the screen.
 
 FRAME can be a frame name, a terminal name, or a frame.
@@ -49,10 +49,10 @@ If FRAME is omitted or nil, use currently selected frame."
 (defun mabo3n/reset-frame (&optional frame)
   "Resize and recenter FRAME.
 
-See `mabo3n/frame-resize' and `mabo3n/recenter-frame'."
+See `mabo3n/frame-resize' and `mabo3n/frame-recenter'."
   (interactive)
   (mabo3n/frame-resize)
-  (mabo3n/recenter-frame))
+  (mabo3n/frame-recenter))
 
 (mabo3n/reset-frame)
 (add-hook 'after-make-frame-functions #'mabo3n/frame-resize)
@@ -63,7 +63,7 @@ See `mabo3n/frame-resize' and `mabo3n/recenter-frame'."
   "F F" #'make-frame
   "F <tab>" #'other-frame
   "F m" #'spacemacs/toggle-maximize-frame
-  "F r c" #'mabo3n/recenter-frame
+  "F r c" #'mabo3n/frame-recenter
   "F r s" #'mabo3n/frame-resize
   "F r r" #'mabo3n/reset-frame)
 
