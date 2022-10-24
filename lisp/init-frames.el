@@ -5,6 +5,9 @@
 (defconst mabo3n/frame-default-size '(100 . 40)
   "Cons cell with default `(WIDTH . HEIGHT)' for frames.")
 
+(defconst mabo3n/frame-mini-size '(80 . 8)
+  "Cons cell with \"mini\" `(WIDTH . HEIGHT)' for frames.")
+
 (defun mabo3n/frame-resize (&optional frame size)
   "Resize FRAME to SIZE and return FRAME.
 
@@ -54,15 +57,24 @@ See `mabo3n/frame-resize' and `mabo3n/frame-recenter'."
   (mabo3n/frame-resize)
   (mabo3n/frame-recenter))
 
+(defun mabo3n/frame-resize-mini (&optional frame)
+  "Resize FRAME to `mabo3n/frame-mini-size'.
+
+If not specified, FRAME defaults to `selected-frame'."
+  (interactive)
+  (let ((frame (or frame (selected-frame))))
+    (mabo3n/frame-resize frame mabo3n/frame-mini-size)))
+
 (mabo3n/frame-reset)
 (add-hook 'after-make-frame-functions #'mabo3n/frame-resize)
 
 (spacemacs/declare-prefix "F r" "Re-")
 
 (spacemacs/set-leader-keys
-  "F F" #'make-frame
+  "F F"   #'make-frame
   "F <tab>" #'other-frame
-  "F M" #'spacemacs/toggle-maximize-frame
+  "F M"   #'spacemacs/toggle-maximize-frame
+  "F m"   #'mabo3n/frame-resize-mini
   "F r c" #'mabo3n/frame-recenter
   "F r s" #'mabo3n/frame-resize
   "F r r" #'mabo3n/frame-reset)
