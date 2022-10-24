@@ -2,7 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
-(defconst mabo3n/default-frame-size '(100 . 40)
+(defconst mabo3n/frame-default-size '(100 . 40)
   "Cons cell with default `(WIDTH . HEIGHT)' for frames.")
 
 (defun mabo3n/resize-frame (&optional frame size)
@@ -11,14 +11,14 @@
 FRAME is a frame object and SIZE has form (WIDTH . HEIGHT).
 
 If not specified, FRAME defaults to `selected-frame' and
-SIZE defaults to `mabo3n/default-frame-size'.
+SIZE defaults to `mabo3n/frame-default-size'.
 
 When called interactively, prompts for WIDTH and HEIGHT."
   (interactive (list nil
-                     (let ((default mabo3n/default-frame-size))
+                     (let ((default mabo3n/frame-default-size))
                        (cons (read-number "Width: "  (car default))
                              (read-number "Height: " (cdr default))))))
-  (let ((size  (or size mabo3n/default-frame-size))
+  (let ((size  (or size mabo3n/frame-default-size))
         (frame (or frame (selected-frame))))
     (set-frame-size frame (car size) (cdr size))
     frame))
