@@ -62,7 +62,7 @@ See `mabo3n/frame-resize' and `mabo3n/frame-recenter'."
 (spacemacs/set-leader-keys
   "F F" #'make-frame
   "F <tab>" #'other-frame
-  "F m" #'spacemacs/toggle-maximize-frame
+  "F M" #'spacemacs/toggle-maximize-frame
   "F r c" #'mabo3n/frame-recenter
   "F r s" #'mabo3n/frame-resize
   "F r r" #'mabo3n/frame-reset)
