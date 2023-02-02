@@ -41,5 +41,35 @@ string (if any)."
         (funcall transform-function strings)
       (mapcar transform-function strings))))
 
+(defun mabo3n/url-decode-region (beg end &optional echo-only allow-newlines)
+  "Replace URL between BEG and END with its unhexed version.
+
+When called with a `\\[universal-argument]', or if ECHO-ONLY is
+t, only print the decoded url in the minibuffer.
+ALLOW-NEWLINES is passed along to `url-unhex-string'."
+  (interactive "r\nP")
+  (let* ((url         (buffer-substring-no-properties beg end))
+         (decoded-url (url-unhex-string url allow-newlines)))
+    (kill-new decoded-url)
+    (if echo-only
+        (message "%s" decoded-url)
+      (delete-region beg end)
+      (insert decoded-url))))
+
+(defun mabo3n/url-encode-region (beg end &optional echo-only allowed-chars)
+  "Replace URL between BEG and END with its hexified version.
+
+When called with a `\\[universal-argument]', or if ECHO-ONLY is
+t, only print the encoded url in the minibuffer.
+ALLOWED-CHARS is passed along to `url-hexify-string'."
+  (interactive "r\nP")
+  (let* ((url         (buffer-substring-no-properties beg end))
+         (encoded-url (url-hexify-string url allowed-chars)))
+    (kill-new encoded-url)
+    (if echo-only
+        (message "%s" encoded-url)
+      (delete-region beg end)
+      (insert encoded-url))))
+
 (provide 'init-utils)
 ;;; init-utils.el ends here
