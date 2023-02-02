@@ -79,6 +79,9 @@ This is the same as `risky-local-variable-p' but without the 2nd condition."
 (advice-add 'make-auto-save-file-name :around
             #'my-shorten-auto-save-file-name)
 
+;; Stop filling "current" directory with .~undo-tree~ files
+(setq undo-tree-history-directory-alist '(("." . "/tmp/emacs/undo-tree")))
+
 ;; Make query replace not stop when encountering read-only text
 ;; This is useful while replacing on helm-ag-edit buffer
 (setq query-replace-skip-read-only t)

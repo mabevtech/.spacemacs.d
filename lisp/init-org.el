@@ -366,7 +366,8 @@ Fallback to `org-insert-link' otherwise."
  org-startup-folded 'show2levels
  org-hide-block-startup t
  org-hide-emphasis-markers t
- org-image-actual-width nil)
+ org-image-actual-width nil
+ org-appear-trigger 'on-change)
 
 (setq-default
  org-default-notes-file (expand-file-name "notes" org-directory)

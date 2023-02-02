@@ -75,5 +75,15 @@ Any extra \\[universal-argument] are forwarded to `git-link'."
 (with-eval-after-load 'git-commit
   (add-hook #'git-commit-mode-hook 'evil-insert-state))
 
+
+;; Fix evil-surround getting in the way while trying to visually-select and
+;; stage specific lines in magit-status buffer (by disabling the mode in there).
+;; Regression: https://github.com/syl20bnr/spacemacs/issues/15448
+(with-eval-after-load 'evil-surround
+  (defun mabo3n/turn-off-evil-surround-mode ()
+    "Turn off evil-surround-mode"
+    (evil-surround-mode -1))
+  (add-hook 'magit-status-mode-hook 'mabo3n/turn-off-evil-surround-mode))
+
 (provide 'init-git)
 ;;; init-git.el ends here
