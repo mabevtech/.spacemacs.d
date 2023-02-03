@@ -20,6 +20,8 @@
   "Whether the current project is a dotnet one."
   (projectile-verify-file-wildcard "?*.csproj"))
 
+;; NOTE: These won't be detected automatically as we're using
+;; a predicate function instead of static-named marker files
 (with-eval-after-load 'projectile
   (projectile-register-project-type
    'dotnet-sln
