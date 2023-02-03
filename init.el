@@ -333,7 +333,7 @@ before packages are loaded."
       ;; <r> to rename (<g r> to refresh)
       (kbd "r") #'treemacs-rename
       ;; <x> to delete
-      (kbd "x") #'treemacs-delete)
+      (kbd "x") #'treemacs-delete-file)
 
     ;; Make SPC p T open project tree (instead of SPC p t)
     (let ((fun 'spacemacs/treemacs-project-toggle))
